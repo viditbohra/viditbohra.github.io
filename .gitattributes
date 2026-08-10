@@ -1,0 +1,8 @@
+# Normalise text files to LF in the repo, whatever the working copy uses.
+* text=auto eol=lf
+
+# Media is binary — never touch it.
+*.jpg  binary
+*.png  binary
+*.mp4  binary
+*.pdf  binary

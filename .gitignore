@@ -1,0 +1,23 @@
+# The raw media folders live one level up and must never be committed —
+# 314 MB of HEIC and uncompressed video, well past GitHub's file size limit.
+/biped/
+/mrt/
+/retargetting/
+/equivariance filter paper implementation/
+/stress concentration/
+/supprt free/
+
+# OS and editor noise
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+*.swp
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/

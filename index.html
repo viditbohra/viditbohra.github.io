@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vidit Bohra</title>
+<meta name="description" content="Vidit Bohra — mechanical engineering student at IIT Bombay working on robotics: mechanism design, control, and state estimation.">
+<meta name="author" content="Vidit Bohra">
+<meta property="og:title" content="Vidit Bohra">
+<meta property="og:description" content="Mechanical engineering at IIT Bombay — robotics, mechanism design, control and state estimation.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+</head>
+<body>
+
+<button id="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme"></button>
+
+<header class="intro">
+  <h1>Vidit Bohra</h1>
+  <p class="lede">
+    Mechanical engineering undergraduate at <strong>IIT Bombay</strong>, minoring in Artificial
+    Intelligence &amp; Data Science. I work on robots — designing the mechanisms, writing the
+    control and estimation that runs them, and machining or printing the parts that make them real.
+  </p>
+  <nav class="links">
+    <a href="mailto:bohravidit@gmail.com">Email</a>
+    <a href="https://github.com/IGotYourMonkey">GitHub</a>
+    <a href="resume.pdf">Résumé (PDF)</a>
+  </nav>
+</header>
+
+<nav class="toc" aria-label="Sections">
+  <a href="#projects">Projects</a>
+  <a href="#experience">Experience</a>
+  <a href="#other">Other work</a>
+  <a href="#skills">Skills</a>
+  <a href="#education">Education</a>
+</nav>
+
+<main>
+
+<section id="projects">
+  <h2>Selected projects</h2>
+
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <article class="project">
+    <h3>Human–Object Interaction Retargeting</h3>
+    <p class="meta">Research · GV Lab, University of Tokyo · Guide: Prof. Gentiane Venture · Jun – Jul 2026</p>
+    <p>
+      An end-to-end pipeline that turns an ordinary monocular RGB video of a person handling an
+      object into motion a robot can actually execute. Human pose comes from HMR2 (4D-Humans),
+      joint positions are extracted through SMPL, and the motion is retargeted onto the robot with
+      inverse kinematics in Holosoma. It runs on both a Pepper humanoid and a UR5 arm.
+    </p>
+    <p>
+      The interesting part is what it preserves. Copying joint angles across bodies of different
+      proportions breaks the task — the hand ends up in the wrong place relative to the object. So
+      the retargeting uses an <strong>interaction-mesh</strong> formulation that encodes the spatial
+      relationship between the human and the object and preserves it through the transfer, keeping
+      the manipulation semantics intact rather than just the pose.
+    </p>
+    <ul class="tags">
+      <li>HMR2 / 4D-Humans</li><li>SMPL</li><li>Holosoma</li><li>Inverse kinematics</li><li>Python</li>
+    </ul>
+    <div class="gallery">
+      <figure>
+        <video controls preload="none" muted loop playsinline poster="assets/retargeting/source-video-poster.jpg">
+          <source src="assets/retargeting/source-video.mp4" type="video/mp4">
+        </video>
+        <figcaption>Input: a single RGB video of the object being handled.</figcaption>
+      </figure>
+      <figure>
+        <video controls preload="none" muted loop playsinline poster="assets/retargeting/object-scan-poster.jpg">
+          <source src="assets/retargeting/object-scan.mp4" type="video/mp4">
+        </video>
+        <figcaption>Raw geometry reconstructed from the video.</figcaption>
+      </figure>
+      <figure>
+        <video controls preload="none" muted loop playsinline poster="assets/retargeting/object-mesh-poster.jpg">
+          <source src="assets/retargeting/object-mesh.mp4" type="video/mp4">
+        </video>
+        <figcaption>The cleaned object mesh used for interaction.</figcaption>
+      </figure>
+      <figure class="plot">
+        <button class="lightbox-open" type="button">
+          <img src="assets/retargeting/point-cloud-thumb.jpg" data-full="assets/retargeting/point-cloud.jpg"
+               alt="Two scatter plots of the cleaned object point cloud in the XZ and XY planes" loading="lazy" decoding="async">
+        </button>
+        <figcaption>Cleaned point cloud, XZ and XY projections.</figcaption>
+      </figure>
+      <figure>
+        <video controls preload="none" muted loop playsinline poster="assets/retargeting/smpl-body-poster.jpg">
+          <source src="assets/retargeting/smpl-body.mp4" type="video/mp4">
+        </video>
+        <figcaption>SMPL body model recovered from the human motion.</figcaption>
+      </figure>
+      <figure>
+        <video controls preload="none" muted loop playsinline poster="assets/retargeting/pepper-sim-poster.jpg">
+          <source src="assets/retargeting/pepper-sim.mp4" type="video/mp4">
+        </video>
+        <figcaption>Retargeted motion on the Pepper humanoid.</figcaption>
+      </figure>
+      <figure>
+        <video controls preload="none" muted loop playsinline poster="assets/retargeting/humanoid-sim-poster.jpg">
+          <source src="assets/retargeting/humanoid-sim.mp4" type="video/mp4">
+        </video>
+        <figcaption>The same pipeline driving a full humanoid in simulation.</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <article class="project">
+    <h3>Mars Rover Team — 5-DOF Robotic Arm</h3>
+    <p class="meta">Mars Rover Team, IIT Bombay · Guide: Prof. P. J. Guruprasad · Oct 2024 – present</p>
+    <p>
+      The manipulator on a semi-autonomous rover built by a 30-person team to cross rough terrain
+      and perform dexterous tasks at international competitions. I designed the 5-DOF arm and
+      reworked most of its drivetrain: a custom two-stage <strong>81:1 cycloidal drive</strong> for
+      torque density, explicit steering for cleaner control, and a 2-DOF differential wrist
+      redesigned as a 3D print that came out <strong>35&nbsp;% lighter</strong> and far easier to
+      manufacture.
+    </p>
+    <p>
+      Two failure modes drove the rest of the design. The scaled-up linear base kept binding on
+      tolerance stack-up, so the rails were redesigned around the principle used in optical disk
+      drives to take the over-constraint out. And because a power loss would let the wrist drop
+      under its own weight, a worm gear drive holds position with no power applied.
+    </p>
+    <p>
+      With this rover the team placed <strong>2nd at the European Rover Challenge</strong> (24 teams,
+      15 countries), took <strong>1st in the Astrobiology Mission</strong> at the International Rover
+      Challenge, and finished 9th overall in the IRC against 35+ institutions worldwide.
+    </p>
+    <ul class="tags">
+      <li>SolidWorks</li><li>Cycloidal drive</li><li>ANSYS</li><li>3D printing</li><li>MSC Adams</li>
+    </ul>
+    <div class="gallery">
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/mrt/rover-field-thumb.jpg" data-full="assets/mrt/rover-field.jpg"
+               alt="The completed rover with its robotic arm deployed on a competition course" loading="lazy" decoding="async">
+        </button>
+        <figcaption>The rover with the arm deployed at competition.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/mrt/bevel-drive-thumb.jpg" data-full="assets/mrt/bevel-drive.jpg"
+               alt="Bevel gear pair and worm drive mounted on a 3D printed bracket with a stepper motor" loading="lazy" decoding="async">
+        </button>
+        <figcaption>Bevel pair and worm drive — the worm prevents back-drive.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/mrt/cycloidal-drive-thumb.jpg" data-full="assets/mrt/cycloidal-drive.jpg"
+               alt="Assembled cycloidal gearbox with red printed cycloidal disc" loading="lazy" decoding="async">
+        </button>
+        <figcaption>The two-stage 81:1 cycloidal drive, assembled.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/mrt/cycloidal-assembly-thumb.jpg" data-full="assets/mrt/cycloidal-assembly.jpg"
+               alt="Close-up of the cycloidal gearbox showing the output flange and pin ring" loading="lazy" decoding="async">
+        </button>
+        <figcaption>Output stage and pin ring.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/mrt/differential-wrist-thumb.jpg" data-full="assets/mrt/differential-wrist.jpg"
+               alt="The 2-DOF differential wrist assembly held in hand" loading="lazy" decoding="async">
+        </button>
+        <figcaption>The 2-DOF differential wrist — 35&nbsp;% lighter than the version it replaced.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/mrt/linear-base-thumb.jpg" data-full="assets/mrt/linear-base.jpg"
+               alt="The linear base rail assembly with lead screw and carriage on a workbench" loading="lazy" decoding="async">
+        </button>
+        <figcaption>Linear base hardware, rebuilt to eliminate binding.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/mrt/rover-cad-thumb.jpg" data-full="assets/mrt/rover-cad.jpg"
+               alt="SolidWorks render of the full rover chassis and rocker-bogie suspension" loading="lazy" decoding="async">
+        </button>
+        <figcaption>Full rover chassis in CAD.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/mrt/rail-cad-thumb.jpg" data-full="assets/mrt/rail-cad.jpg"
+               alt="CAD render of the linear rail base assembly" loading="lazy" decoding="async">
+        </button>
+        <figcaption>Rail base — the optical-disk-drive-inspired layout.</figcaption>
+      </figure>
+      <figure>
+        <video controls preload="none" muted loop playsinline poster="assets/mrt/gearbox-cad-poster.jpg">
+          <source src="assets/mrt/gearbox-cad.mp4" type="video/mp4">
+        </video>
+        <figcaption>Cycloidal gearbox walkthrough in CAD.</figcaption>
+      </figure>
+      <figure>
+        <video controls preload="none" muted loop playsinline poster="assets/mrt/linear-base-cad-poster.jpg">
+          <source src="assets/mrt/linear-base-cad.mp4" type="video/mp4">
+        </video>
+        <figcaption>Linear base motion study.</figcaption>
+      </figure>
+      <figure>
+        <video controls preload="none" muted loop playsinline poster="assets/mrt/linear-base-demo-poster.jpg">
+          <source src="assets/mrt/linear-base-demo.mp4" type="video/mp4">
+        </video>
+        <figcaption>The base running on hardware.</figcaption>
+      </figure>
+      <figure>
+        <video controls preload="none" muted loop playsinline poster="assets/mrt/wrist-motor-poster.jpg">
+          <source src="assets/mrt/wrist-motor.mp4" type="video/mp4">
+        </video>
+        <figcaption>Wrist actuator under test.</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <article class="project">
+    <h3>Robo Sapien — Bipedal Robot</h3>
+    <p class="meta">Institute Technical Summer Project (ITSP), IIT Bombay · May 2025 – present</p>
+    <p>
+      A 6-DOF biped built from scratch after a literature review of existing walking robots set the
+      baseline requirements. The frame uses lightweight carbon fibre tubes to keep mass down, limit
+      sensors for joint homing, and a rack-and-pinion assembly that shifts the centre of mass
+      predictably instead of relying on the legs alone to stay upright.
+    </p>
+    <p>
+      Control was approached from three directions. A <strong>PPO policy</strong> trained in Isaac Lab
+      with a multi-term reward — velocity tracking, feet air time, joint limit penalties — produced a
+      stable walking gait in simulation. On hardware, inverse kinematics and PID loops on an Arduino
+      Mega with an MPU6050 handle real-time balance. Alongside those, a state-space model fitted from
+      Simscape (85&nbsp;% fit) drove a data-driven controller in Simulink, and an
+      <strong>LQR controller</strong> on a linear inverted pendulum model produced a stable gait
+      analytically.
+    </p>
+    <ul class="tags">
+      <li>Isaac Lab</li><li>PPO</li><li>Simulink / Simscape</li><li>LQR</li><li>Arduino</li><li>FDM printing</li>
+    </ul>
+    <div class="gallery">
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/biped/cad-render-thumb.jpg" data-full="assets/biped/cad-render.jpg"
+               alt="CAD render of the bipedal robot showing both legs and the trussed torso structure" loading="lazy" decoding="async">
+        </button>
+        <figcaption>The biped in CAD — trussed structure to cut mass.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/biped/hardware-thumb.jpg" data-full="assets/biped/hardware.jpg"
+               alt="The assembled biped in red 3D printed parts, wired and standing on a bench" loading="lazy" decoding="async">
+        </button>
+        <figcaption>Assembled and wired, standing under its own structure.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/biped/cad-assembly-thumb.jpg" data-full="assets/biped/cad-assembly.jpg"
+               alt="Exploded CAD assembly of the biped legs on a laptop screen" loading="lazy" decoding="async">
+        </button>
+        <figcaption>Exploded assembly during design.</figcaption>
+      </figure>
+      <figure class="plot">
+        <button class="lightbox-open" type="button">
+          <img src="assets/biped/simulink-model-thumb.jpg" data-full="assets/biped/simulink-model.jpg"
+               alt="Simulink block diagram of the biped control model" loading="lazy" decoding="async">
+        </button>
+        <figcaption>The Simulink control model.</figcaption>
+      </figure>
+      <figure>
+        <video controls preload="none" muted loop playsinline poster="assets/biped/rl-policy-poster.jpg">
+          <source src="assets/biped/rl-policy.mp4" type="video/mp4">
+        </video>
+        <figcaption>The trained PPO policy walking in simulation.</figcaption>
+      </figure>
+      <figure>
+        <video controls preload="none" muted loop playsinline poster="assets/biped/gait-sim-poster.jpg">
+          <source src="assets/biped/gait-sim.mp4" type="video/mp4">
+        </video>
+        <figcaption>Gait study.</figcaption>
+      </figure>
+      <figure>
+        <video controls preload="none" muted loop playsinline poster="assets/biped/walking-poster.jpg">
+          <source src="assets/biped/walking.mp4" type="video/mp4">
+        </video>
+        <figcaption>Walking on hardware.</figcaption>
+      </figure>
+      <figure>
+        <video controls preload="none" muted loop playsinline poster="assets/biped/balance-test-poster.jpg">
+          <source src="assets/biped/balance-test.mp4" type="video/mp4">
+        </video>
+        <figcaption>Balance test with the IK and PID loops live.</figcaption>
+      </figure>
+      <figure>
+        <video controls preload="none" muted loop playsinline poster="assets/biped/assembly-poster.jpg">
+          <source src="assets/biped/assembly.mp4" type="video/mp4">
+        </video>
+        <figcaption>Leg assembly and range-of-motion check.</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <article class="project">
+    <h3>State Estimation on Lie Groups &amp; Visual-Inertial Odometry</h3>
+    <p class="meta">SC651, Prof. Ravi Banavar, IIT Bombay · Aug 2025 – present</p>
+    <p>
+      This started as coursework in estimation on Lie groups: implementing the Kalman filter, TRIAD
+      and QUEST on an IMU to get a stable attitude estimate, fusing gyroscope, accelerometer and
+      magnetometer data. I then implemented the <strong>Mahony filter</strong> and compared it
+      systematically against TRIAD and QUEST, which gave a <strong>40&nbsp;% lower standard
+      deviation</strong> in the output.
+    </p>
+    <p>
+      It has since grown into a visual-inertial setup on hardware I built — an RP2040 Pico with an
+      IMX335 camera and an MPU6050, characterised with an Allan deviation analysis to pin down the
+      gyro and accelerometer noise parameters. The filter estimates the camera trajectory and a
+      landmark map together from the fused visual and inertial stream.
+    </p>
+    <ul class="tags">
+      <li>Lie groups</li><li>Kalman / Mahony / TRIAD / QUEST</li><li>Allan deviation</li><li>Python</li><li>RP2040</li>
+    </ul>
+    <div class="gallery">
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/equivariant-filter/camera-imu-rig-thumb.jpg" data-full="assets/equivariant-filter/camera-imu-rig.jpg"
+               alt="Hand holding the custom camera-IMU rig: an RP2040 Pico, IMX335 camera and MPU6050 on a printed plate" loading="lazy" decoding="async">
+        </button>
+        <figcaption>The rig: RP2040 Pico, IMX335 camera and MPU6050 on a printed plate.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/equivariant-filter/rig-detail-thumb.jpg" data-full="assets/equivariant-filter/rig-detail.jpg"
+               alt="The camera-IMU rig set up on a desk during data capture" loading="lazy" decoding="async">
+        </button>
+        <figcaption>Set up for a capture run.</figcaption>
+      </figure>
+      <figure class="plot">
+        <button class="lightbox-open" type="button">
+          <img src="assets/equivariant-filter/trajectory-thumb.jpg" data-full="assets/equivariant-filter/trajectory.jpg"
+               alt="3D estimated camera path coloured by time next to a top-down XY view with landmarks" loading="lazy" decoding="async">
+        </button>
+        <figcaption>Estimated path coloured by time, with the recovered landmarks.</figcaption>
+      </figure>
+      <figure class="plot">
+        <button class="lightbox-open" type="button">
+          <img src="assets/equivariant-filter/landmark-map-thumb.jpg" data-full="assets/equivariant-filter/landmark-map.jpg"
+               alt="3D landmark map with start and end markers" loading="lazy" decoding="async">
+        </button>
+        <figcaption>The resulting 3D landmark map.</figcaption>
+      </figure>
+      <figure class="plot">
+        <button class="lightbox-open" type="button">
+          <img src="assets/equivariant-filter/allan-deviation-thumb.jpg" data-full="assets/equivariant-filter/allan-deviation.jpg"
+               alt="Six Allan deviation plots characterising gyroscope and accelerometer noise on each axis" loading="lazy" decoding="async">
+        </button>
+        <figcaption>Allan deviation for all six IMU axes — this sets the filter's noise model.</figcaption>
+      </figure>
+      <figure>
+        <video controls preload="none" muted loop playsinline poster="assets/equivariant-filter/vio-run-poster.jpg">
+          <source src="assets/equivariant-filter/vio-run.mp4" type="video/mp4">
+        </video>
+        <figcaption>A live run with tracked features and the state estimate overlaid.</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <article class="project">
+    <h3>Support-Free 3D Printing via Conical Slicing</h3>
+    <p class="meta">Course project · ME230, Prof. Ramesh Singh · Jan – Apr 2026</p>
+    <p>
+      Printing a 90° overhang normally means printing supports, then cutting them off and cleaning
+      up the scar they leave. This project prints them without any support at all — on an
+      <strong>unmodified 3-axis FDM printer</strong>, no hardware changes.
+    </p>
+    <p>
+      The trick is to do the work in software. The STL is pre-warped, sliced with an ordinary planar
+      slicer, and then the resulting G-code is put through a back-transformation in Python, so the
+      nozzle traces conical non-planar layers that support themselves as they build. The result:
+      <strong>25&nbsp;% less material</strong>, <strong>20&nbsp;% shorter build time</strong>, and no
+      post-processing at all.
+    </p>
+    <ul class="tags">
+      <li>Python</li><li>G-code</li><li>Non-planar slicing</li><li>FDM</li><li>SolidWorks</li>
+    </ul>
+    <div class="gallery">
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/support-free/cad-model-thumb.jpg" data-full="assets/support-free/cad-model.jpg"
+               alt="CAD model of the test part: a bent pipe with a 90 degree overhang and a base flange" loading="lazy" decoding="async">
+        </button>
+        <figcaption>The test part — a bent pipe with a true 90° overhang.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/support-free/printed-part-thumb.jpg" data-full="assets/support-free/printed-part.jpg"
+               alt="The finished black printed pipe standing on its flange, printed without supports" loading="lazy" decoding="async">
+        </button>
+        <figcaption>Printed with no supports and no post-processing.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/support-free/nozzle-angle-thumb.jpg" data-full="assets/support-free/nozzle-angle.jpg"
+               alt="Photo of the nozzle mid-print annotated with the conical layer angles" loading="lazy" decoding="async">
+        </button>
+        <figcaption>Measuring the achieved cone angle mid-print.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/support-free/conical-part-thumb.jpg" data-full="assets/support-free/conical-part.jpg"
+               alt="CAD view of a conical geometry used to validate the slicing transformation" loading="lazy" decoding="async">
+        </button>
+        <figcaption>Conical geometry used to validate the transformation.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/support-free/overhang-part-thumb.jpg" data-full="assets/support-free/overhang-part.jpg"
+               alt="Hand holding a printed part with a thin unsupported overhang projecting outward" loading="lazy" decoding="async">
+        </button>
+        <figcaption>A thin unsupported overhang, printed in mid-air.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/support-free/overhang-detail-thumb.jpg" data-full="assets/support-free/overhang-detail.jpg"
+               alt="Close-up of the printed overhang showing the layer finish on the underside" loading="lazy" decoding="async">
+        </button>
+        <figcaption>Underside finish — nothing to remove.</figcaption>
+      </figure>
+      <figure>
+        <video controls preload="none" muted loop playsinline poster="assets/support-free/printing-poster.jpg">
+          <source src="assets/support-free/printing.mp4" type="video/mp4">
+        </video>
+        <figcaption>The conical toolpath running on an unmodified printer.</figcaption>
+      </figure>
+      <figure>
+        <video controls preload="none" muted loop playsinline poster="assets/support-free/print-run-poster.jpg">
+          <source src="assets/support-free/print-run.mp4" type="video/mp4">
+        </video>
+        <figcaption>Building the overhang layer by layer.</figcaption>
+      </figure>
+      <figure>
+        <video controls preload="none" muted loop playsinline poster="assets/support-free/nozzle-path-poster.jpg">
+          <source src="assets/support-free/nozzle-path.mp4" type="video/mp4">
+        </video>
+        <figcaption>Nozzle tracing the non-planar path.</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <article class="project">
+    <h3>Stress Concentration Analysis via Photoelasticity</h3>
+    <p class="meta">Course project · ME218 Solid Mechanics Lab, Prof. Sripriya Ramamoorthy · Jan – Apr 2026</p>
+    <p>
+      Measuring stress concentration factors optically rather than numerically. Epoxy specimens were
+      cast in TPU moulds with three hole geometries — square, filleted-square and elliptical — then
+      loaded in a polariscope, where the isochromatic fringe pattern makes the stress field directly
+      visible. Counting fringe order around the hole gives the SCF.
+    </p>
+    <p>
+      The measured values were validated against ANSYS FEA and agreed closely on where the
+      concentrations appear. Filleting the sharp corners of the square hole cut the SCF by
+      <strong>21&nbsp;%</strong>, and switching to an elliptical hole reduced it a further
+      <strong>33&nbsp;%</strong>.
+    </p>
+    <ul class="tags">
+      <li>Photoelasticity</li><li>ANSYS FEA</li><li>Experimental mechanics</li><li>TPU moulding</li>
+    </ul>
+    <div class="gallery">
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/stress-concentration/square-hole-thumb.jpg" data-full="assets/stress-concentration/square-hole.jpg"
+               alt="Isochromatic fringe pattern around a square hole in a loaded epoxy specimen, viewed through a polariscope" loading="lazy" decoding="async">
+        </button>
+        <figcaption>Square hole under load — fringes crowd the sharp corners.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/stress-concentration/filleted-hole-thumb.jpg" data-full="assets/stress-concentration/filleted-hole.jpg"
+               alt="Fringe pattern around a filleted square hole showing fewer fringes at the corners" loading="lazy" decoding="async">
+        </button>
+        <figcaption>Filleted corners — 21&nbsp;% lower SCF.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/stress-concentration/elliptical-hole-thumb.jpg" data-full="assets/stress-concentration/elliptical-hole.jpg"
+               alt="Fringe pattern around an elliptical hole, noticeably smoother than the square case" loading="lazy" decoding="async">
+        </button>
+        <figcaption>Elliptical hole — a further 33&nbsp;% reduction.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/stress-concentration/square-hole-detail-thumb.jpg" data-full="assets/stress-concentration/square-hole-detail.jpg"
+               alt="Closer view of the fringe orders around the square hole" loading="lazy" decoding="async">
+        </button>
+        <figcaption>Counting fringe order around the square hole.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/stress-concentration/elliptical-hole-detail-thumb.jpg" data-full="assets/stress-concentration/elliptical-hole-detail.jpg"
+               alt="Closer view of the elliptical specimen under load in the loading frame" loading="lazy" decoding="async">
+        </button>
+        <figcaption>The elliptical specimen in the loading frame.</figcaption>
+      </figure>
+      <figure>
+        <button class="lightbox-open" type="button">
+          <img src="assets/stress-concentration/square-hole-wide-thumb.jpg" data-full="assets/stress-concentration/square-hole-wide.jpg"
+               alt="Wider view through the polariscope showing the specimen, grips and loading frame" loading="lazy" decoding="async">
+        </button>
+        <figcaption>The full polariscope view, grips and frame included.</figcaption>
+      </figure>
+    </div>
+  </article>
+
+</section>
+
+<section id="experience">
+  <h2>Experience</h2>
+
+  <div class="entry">
+    <h3>Subsystem Lead — Robotic Arm &amp; LDT</h3>
+    <p class="meta">Mars Rover Team, IIT Bombay · Apr 2026 – present</p>
+    <p>
+      Leading a team of 15 undergraduates designing a multi-functional robotic arm, within an
+      interdisciplinary group of 25+ building robotic subsystems for planetary rover competitions.
+      The arm uses belt drives, BLDC motors and a two-stage planetary and cycloidal gearbox, laid out
+      to keep inertia low and the thing controllable. I also mentor the quadruped and hexapod builds
+      from concept through to working prototype.
+    </p>
+  </div>
+
+  <div class="entry">
+    <h3>Research Intern</h3>
+    <p class="meta">GV Lab, University of Tokyo · Guide: Prof. Gentiane Venture · Jun – Jul 2026</p>
+    <p>
+      Built the human–object interaction retargeting pipeline described above, deployed on a Pepper
+      humanoid and a UR5 arm.
+    </p>
+  </div>
+
+  <div class="entry">
+    <h3>Senior Design Engineer — Robotic Arm Subsystem</h3>
+    <p class="meta">Mars Rover Team, IIT Bombay · Apr 2025 – Apr 2026</p>
+    <p>
+      Designed the 5-DOF arm and its drivetrain — the cycloidal drive, differential wrist, linear
+      base and worm-gear holding mechanism.
+    </p>
+  </div>
+
+  <div class="entry">
+    <h3>Convener</h3>
+    <p class="meta">Krittika, Astronomy Club, IIT Bombay · May 2025 – Mar 2026</p>
+    <p>
+      Part of a 10+ member team making astronomy accessible through research and outreach. Designed a
+      custom 2-DOF stand for the EdgeHD11 telescope installed in the institute's newly inaugurated
+      observatory, led a learners' space session on Coordinate Systems &amp; Time, gave a talk on
+      careers in astronomy, helped organise a National Space Day exhibition reaching 100+ students
+      and 10,000+ residents, and ran a workshop for 300+ students building constellation projectors
+      and sundials.
+    </p>
+  </div>
+</section>
+
+<section id="other">
+  <h2>Other projects</h2>
+
+  <div class="entry">
+    <h3>Holo-Battalion</h3>
+    <p class="meta">e-Yantra Robotics Competition · Aug 2025 – present</p>
+    <p>
+      A swarm of three robots, each with an articulated arm and omnidirectional holonomic drive,
+      coordinated over a ROS2 server–client framework with ArUco marker vision and homography for
+      pose estimation. A centralized task allocation algorithm assigns work by Euclidean proximity to
+      minimise total travel across the warehouse fleet. Three prototypes built with a custom etched
+      PCB for the ESP32 and a linear gripper assembly.
+    </p>
+  </div>
+
+  <div class="entry">
+    <h3>Wildlife Detection via Multi-Feature Engineering</h3>
+    <p class="meta">Course project · DS203, Prof. Vinay Kulkarni · Aug – Oct 2025</p>
+    <p>
+      An XGBoost pipeline classifying wildlife presence, <strong>60&nbsp;% more accurate</strong> than
+      a baseline logistic regression. Combined HOG, LBP, GLCM and ORB descriptors into a
+      high-dimensional feature set, then pruned with SelectKBest to the 150 most predictive
+      variables — worth another <strong>40&nbsp;%</strong> over a raw pixel baseline.
+    </p>
+  </div>
+
+  <div class="entry">
+    <h3>Drone Remote Controller</h3>
+    <p class="meta">Course project · Makerspace MS101, Prof. Joseph John · Jul – Nov 2024</p>
+    <p>
+      A joystick remote-control system giving a drone prototype hover capability. Drafted the
+      schematics and routed the PCB in EasyEDA for an ESP32-powered controller with ARM switches and
+      an OLED display, and wrote the control-axis calibration procedures.
+    </p>
+  </div>
+</section>
+
+<section id="skills">
+  <h2>Skills</h2>
+  <dl class="skills">
+    <dt>Design &amp; simulation</dt>
+    <dd>SolidWorks · ANSYS · Fusion 360 · MSC Adams · MATLAB · Simulink · Simscape Multibody · LaserCad</dd>
+
+    <dt>Robotics</dt>
+    <dd>ROS2 · Isaac Lab · Holosoma · Gazebo · MuJoCo</dd>
+
+    <dt>Programming</dt>
+    <dd>C / C++ · Python · LaTeX</dd>
+
+    <dt>Manufacturing</dt>
+    <dd>FDM 3D printing · PCB design (EasyEDA) · Photoelasticity · Machining</dd>
+  </dl>
+</section>
+
+<section id="education">
+  <h2>Education</h2>
+  <div class="entry">
+    <h3>B.Tech, Mechanical Engineering — IIT Bombay</h3>
+    <p class="meta">2024 – 2028 · CPI 8.58 · Minor in Artificial Intelligence &amp; Data Science</p>
+    <p>
+      Coursework in thermodynamics, solid mechanics, fluid mechanics, numerical analysis, engineering
+      mechanics, design of mechanical systems, structural materials and manufacturing, alongside
+      multivariable calculus, linear algebra, differential equations, classical mechanics, and
+      programming for AI and data science.
+    </p>
+  </div>
+  <div class="entry">
+    <h3>Pace Junior Science College, Dadar — HSC</h3>
+    <p class="meta">2024 · 86.67&nbsp;%</p>
+  </div>
+  <div class="entry">
+    <h3>Campion School — ICSE</h3>
+    <p class="meta">2022 · 96.20&nbsp;%</p>
+  </div>
+</section>
+
+<section id="beyond">
+  <h2>Away from the lab</h2>
+  <p>
+    I run half marathons under 2&nbsp;hours 15&nbsp;minutes, won first prize in the Institute
+    Badminton League and placed in the freshers' swimming and badminton championships, trekked
+    Hampta Pass at over 13,000&nbsp;feet, and performed in the annual production with Fourthwall,
+    the dramatics club.
+  </p>
+</section>
+
+</main>
+
+<footer>
+  <h2>Get in touch</h2>
+  <nav class="links">
+    <a href="mailto:bohravidit@gmail.com">bohravidit@gmail.com</a>
+    <a href="https://github.com/IGotYourMonkey">GitHub</a>
+    <a href="resume.pdf">Résumé (PDF)</a>
+  </nav>
+  <p class="colophon">Built by hand — no frameworks, no trackers.</p>
+</footer>
+
+<div id="lightbox" hidden>
+  <button id="lightbox-close" type="button" aria-label="Close">&times;</button>
+  <img id="lightbox-img" alt="">
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
