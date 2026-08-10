@@ -22,7 +22,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 EMAIL = "bohravidit@gmail.com"
-GITHUB = "https://github.com/IGotYourMonkey"
+GITHUB = "https://github.com/viditbohra"
 
 DIMS = json.loads((ROOT / "assets" / "dimensions.json").read_text())
 

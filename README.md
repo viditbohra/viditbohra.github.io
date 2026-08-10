@@ -1,4 +1,4 @@
-# igotyourmonkey.github.io
+# viditbohra.github.io
 
 Personal site for Vidit Bohra. Plain HTML, CSS and JavaScript. No framework and no
 dependencies at runtime. GitHub Pages serves it straight from the repo root.
