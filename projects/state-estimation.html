@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>State Estimation on Lie Groups | Vidit Bohra</title>
+<meta name="description" content="Attitude estimation on Lie groups, extended into visual inertial odometry on a rig I built.">
+<meta property="og:title" content="State Estimation on Lie Groups | Vidit Bohra">
+<meta property="og:description" content="Attitude estimation on Lie groups, extended into visual inertial odometry on a rig I built.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="../style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9881;</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="bar">
+    <a class="wordmark" href="../index.html">Vidit Bohra</a>
+    <nav class="topnav"><a class="back" href="../index.html">All work</a></nav>
+    <button id="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme"></button>
+  </div>
+</header>
+
+
+<main class="project-page">
+
+<section class="project-hero">
+  <div class="wrap narrow">
+    <p class="eyebrow">SC651, Prof. Ravi Banavar, IIT Bombay &middot; Aug 2025 to present</p>
+    <h1>State Estimation on Lie Groups</h1>
+    <p class="tagline">Attitude estimation on Lie groups, extended into visual inertial odometry on a rig I built.</p>
+    <ul class="tags big"><li>Lie groups</li><li>Kalman</li><li>Mahony</li><li>Allan deviation</li><li>RP2040</li><li>Python</li></ul>
+  </div>
+  <div class="wrap">
+    <figure class="cover"><button class="media" data-full="../assets/state-estimation/camera-imu-rig.jpg" aria-label="Enlarge image: A hand holding the custom camera and IMU rig built on a printed plate"><img src="../assets/state-estimation/camera-imu-rig.jpg" alt="A hand holding the custom camera and IMU rig built on a printed plate" decoding="async"></button></figure>
+  </div>
+</section>
+
+<section class="writeup">
+  <div class="wrap narrow prose"><p>This started as coursework in estimation on Lie groups: implementing the Kalman filter, TRIAD and QUEST on an IMU to get a stable attitude estimate by fusing gyroscope, accelerometer and magnetometer data. I then implemented the Mahony filter and compared it systematically against TRIAD and QUEST, which gave a 40% lower standard deviation in the output.</p><p>It has since grown into a visual inertial setup on hardware I built, an RP2040 Pico with an IMX335 camera and an MPU6050, characterised with an Allan deviation analysis to pin down the gyro and accelerometer noise parameters. The filter estimates the camera trajectory and a landmark map together from the fused visual and inertial stream.</p></div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>Gallery</h2>
+    <div class="grid"><figure class="tile"><button class="media" data-full="../assets/state-estimation/rig-detail.jpg" aria-label="Enlarge image: The rig set up for a capture run."><img src="../assets/state-estimation/rig-detail-thumb.jpg" alt="The rig set up for a capture run." loading="lazy" decoding="async"></button><figcaption>The rig set up for a capture run.</figcaption></figure><figure class="tile"><button class="media video" data-video="../assets/state-estimation/vio-run.mp4" aria-label="Play video: A live run with tracked features and the state estimate overlaid."><img src="../assets/state-estimation/vio-run-poster.jpg" alt="A live run with tracked features and the state estimate overlaid." loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span></button><figcaption>A live run with tracked features and the state estimate overlaid.</figcaption></figure><figure class="tile wide"><button class="media" data-full="../assets/state-estimation/trajectory.jpg" aria-label="Enlarge image: Estimated path coloured by time, with the recovered landmarks."><img src="../assets/state-estimation/trajectory-thumb.jpg" alt="Estimated path coloured by time, with the recovered landmarks." loading="lazy" decoding="async"></button><figcaption>Estimated path coloured by time, with the recovered landmarks.</figcaption></figure><figure class="tile wide"><button class="media" data-full="../assets/state-estimation/landmark-map.jpg" aria-label="Enlarge image: The resulting 3D landmark map."><img src="../assets/state-estimation/landmark-map-thumb.jpg" alt="The resulting 3D landmark map." loading="lazy" decoding="async"></button><figcaption>The resulting 3D landmark map.</figcaption></figure><figure class="tile wide"><button class="media" data-full="../assets/state-estimation/allan-deviation.jpg" aria-label="Enlarge image: Allan deviation for all six IMU axes. This sets the noise model the filter uses."><img src="../assets/state-estimation/allan-deviation-thumb.jpg" alt="Allan deviation for all six IMU axes. This sets the noise model the filter uses." loading="lazy" decoding="async"></button><figcaption>Allan deviation for all six IMU axes. This sets the noise model the filter uses.</figcaption></figure></div>
+  </div>
+</section>
+
+<nav class="pager">
+  <div class="wrap">
+    <a class="pager-link" href="bipedal-robot.html">
+      <span class="dir">Previous</span><span class="name">Robo Sapien, a Bipedal Robot</span></a>
+    <a class="pager-link next" href="support-free-printing.html">
+      <span class="dir">Next</span><span class="name">Support Free 3D Printing</span></a>
+  </div>
+</nav>
+
+</main>
+
+
+<footer id="contact">
+  <div class="wrap">
+    <h2>Get in touch</h2>
+    <p class="footer-line">Happy to talk about robotics, mechanism design or anything on this site.</p>
+    <div class="btns">
+      <a class="btn primary" href="mailto:bohravidit@gmail.com">bohravidit@gmail.com</a>
+      <a class="btn" href="https://github.com/IGotYourMonkey">GitHub</a>
+      <a class="btn" href="../resume.pdf">Download resume</a>
+    </div>
+  </div>
+</footer>
+
+<div id="lightbox" hidden>
+  <button id="lightbox-close" type="button" aria-label="Close">&times;</button>
+  <img id="lightbox-img" alt="">
+</div>
+
+<script src="../script.js"></script>
+</body>
+</html>

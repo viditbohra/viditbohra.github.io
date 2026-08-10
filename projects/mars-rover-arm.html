@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mars Rover Robotic Arm | Vidit Bohra</title>
+<meta name="description" content="A 5-DOF manipulator for a competition rover, built around a custom cycloidal drive.">
+<meta property="og:title" content="Mars Rover Robotic Arm | Vidit Bohra">
+<meta property="og:description" content="A 5-DOF manipulator for a competition rover, built around a custom cycloidal drive.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="../style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9881;</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="bar">
+    <a class="wordmark" href="../index.html">Vidit Bohra</a>
+    <nav class="topnav"><a class="back" href="../index.html">All work</a></nav>
+    <button id="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme"></button>
+  </div>
+</header>
+
+
+<main class="project-page">
+
+<section class="project-hero">
+  <div class="wrap narrow">
+    <p class="eyebrow">Mars Rover Team, IIT Bombay &middot; Oct 2024 to present</p>
+    <h1>Mars Rover Robotic Arm</h1>
+    <p class="tagline">A 5-DOF manipulator for a competition rover, built around a custom cycloidal drive.</p>
+    <ul class="tags big"><li>SolidWorks</li><li>Cycloidal drive</li><li>ANSYS</li><li>3D printing</li><li>MSC Adams</li></ul>
+  </div>
+  <div class="wrap">
+    <figure class="cover"><button class="media" data-full="../assets/mars-rover-arm/rover-field.jpg" aria-label="Enlarge image: The completed rover with its robotic arm deployed on a competition course"><img src="../assets/mars-rover-arm/rover-field.jpg" alt="The completed rover with its robotic arm deployed on a competition course" decoding="async"></button></figure>
+  </div>
+</section>
+
+<section class="writeup">
+  <div class="wrap narrow prose"><p>The manipulator on a semi autonomous rover built by a 30 person team to cross rough terrain and perform dexterous tasks at international competitions. I designed the 5-DOF arm and reworked most of its drivetrain: a custom two stage 81:1 cycloidal drive for torque density, explicit steering for cleaner control, and a 2-DOF differential wrist redesigned as a 3D print that came out 35% lighter and much easier to manufacture.</p><p>Two failure modes shaped the rest of the design. The scaled up linear base kept binding on tolerance stack up, so the rails were redesigned around the principle used in optical disk drives to take the over constraint out. And because a power loss would let the wrist drop under its own weight, a worm gear drive holds position with no power applied.</p><p>With this rover the team placed 2nd at the European Rover Challenge against 24 teams from 15 countries, took 1st in the Astrobiology Mission at the International Rover Challenge, and finished 9th overall in the IRC against more than 35 institutions worldwide.</p></div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>Gallery</h2>
+    <div class="grid"><figure class="tile"><button class="media" data-full="../assets/mars-rover-arm/cycloidal-drive.jpg" aria-label="Enlarge image: The two stage 81:1 cycloidal drive, assembled."><img src="../assets/mars-rover-arm/cycloidal-drive-thumb.jpg" alt="The two stage 81:1 cycloidal drive, assembled." loading="lazy" decoding="async"></button><figcaption>The two stage 81:1 cycloidal drive, assembled.</figcaption></figure><figure class="tile"><button class="media" data-full="../assets/mars-rover-arm/bevel-drive.jpg" aria-label="Enlarge image: Bevel pair and worm drive. The worm is what prevents back drive."><img src="../assets/mars-rover-arm/bevel-drive-thumb.jpg" alt="Bevel pair and worm drive. The worm is what prevents back drive." loading="lazy" decoding="async"></button><figcaption>Bevel pair and worm drive. The worm is what prevents back drive.</figcaption></figure><figure class="tile"><button class="media" data-full="../assets/mars-rover-arm/cycloidal-assembly.jpg" aria-label="Enlarge image: Output stage and pin ring."><img src="../assets/mars-rover-arm/cycloidal-assembly-thumb.jpg" alt="Output stage and pin ring." loading="lazy" decoding="async"></button><figcaption>Output stage and pin ring.</figcaption></figure><figure class="tile"><button class="media" data-full="../assets/mars-rover-arm/differential-wrist.jpg" aria-label="Enlarge image: The 2-DOF differential wrist, 35% lighter than the version it replaced."><img src="../assets/mars-rover-arm/differential-wrist-thumb.jpg" alt="The 2-DOF differential wrist, 35% lighter than the version it replaced." loading="lazy" decoding="async"></button><figcaption>The 2-DOF differential wrist, 35% lighter than the version it replaced.</figcaption></figure><figure class="tile"><button class="media" data-full="../assets/mars-rover-arm/linear-base.jpg" aria-label="Enlarge image: Linear base hardware, rebuilt to eliminate binding."><img src="../assets/mars-rover-arm/linear-base-thumb.jpg" alt="Linear base hardware, rebuilt to eliminate binding." loading="lazy" decoding="async"></button><figcaption>Linear base hardware, rebuilt to eliminate binding.</figcaption></figure><figure class="tile"><button class="media" data-full="../assets/mars-rover-arm/rover-cad.jpg" aria-label="Enlarge image: Full rover chassis in CAD."><img src="../assets/mars-rover-arm/rover-cad-thumb.jpg" alt="Full rover chassis in CAD." loading="lazy" decoding="async"></button><figcaption>Full rover chassis in CAD.</figcaption></figure><figure class="tile"><button class="media" data-full="../assets/mars-rover-arm/rail-cad.jpg" aria-label="Enlarge image: Rail base, laid out to remove the over constraint."><img src="../assets/mars-rover-arm/rail-cad-thumb.jpg" alt="Rail base, laid out to remove the over constraint." loading="lazy" decoding="async"></button><figcaption>Rail base, laid out to remove the over constraint.</figcaption></figure><figure class="tile"><button class="media video" data-video="../assets/mars-rover-arm/gearbox-cad.mp4" aria-label="Play video: Cycloidal gearbox walkthrough."><img src="../assets/mars-rover-arm/gearbox-cad-poster.jpg" alt="Cycloidal gearbox walkthrough." loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span></button><figcaption>Cycloidal gearbox walkthrough.</figcaption></figure><figure class="tile"><button class="media video" data-video="../assets/mars-rover-arm/linear-base-cad.mp4" aria-label="Play video: Linear base motion study."><img src="../assets/mars-rover-arm/linear-base-cad-poster.jpg" alt="Linear base motion study." loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span></button><figcaption>Linear base motion study.</figcaption></figure><figure class="tile"><button class="media video" data-video="../assets/mars-rover-arm/linear-base-demo.mp4" aria-label="Play video: The base running on hardware."><img src="../assets/mars-rover-arm/linear-base-demo-poster.jpg" alt="The base running on hardware." loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span></button><figcaption>The base running on hardware.</figcaption></figure><figure class="tile"><button class="media video" data-video="../assets/mars-rover-arm/wrist-motor.mp4" aria-label="Play video: Wrist actuator under test."><img src="../assets/mars-rover-arm/wrist-motor-poster.jpg" alt="Wrist actuator under test." loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span></button><figcaption>Wrist actuator under test.</figcaption></figure></div>
+  </div>
+</section>
+
+<nav class="pager">
+  <div class="wrap">
+    <a class="pager-link" href="retargeting.html">
+      <span class="dir">Previous</span><span class="name">Human to Robot Motion Retargeting</span></a>
+    <a class="pager-link next" href="bipedal-robot.html">
+      <span class="dir">Next</span><span class="name">Robo Sapien, a Bipedal Robot</span></a>
+  </div>
+</nav>
+
+</main>
+
+
+<footer id="contact">
+  <div class="wrap">
+    <h2>Get in touch</h2>
+    <p class="footer-line">Happy to talk about robotics, mechanism design or anything on this site.</p>
+    <div class="btns">
+      <a class="btn primary" href="mailto:bohravidit@gmail.com">bohravidit@gmail.com</a>
+      <a class="btn" href="https://github.com/IGotYourMonkey">GitHub</a>
+      <a class="btn" href="../resume.pdf">Download resume</a>
+    </div>
+  </div>
+</footer>
+
+<div id="lightbox" hidden>
+  <button id="lightbox-close" type="button" aria-label="Close">&times;</button>
+  <img id="lightbox-img" alt="">
+</div>
+
+<script src="../script.js"></script>
+</body>
+</html>

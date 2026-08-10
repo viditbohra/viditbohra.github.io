@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Support Free 3D Printing | Vidit Bohra</title>
+<meta name="description" content="Printing 90 degree overhangs with no support material, on an unmodified 3-axis printer.">
+<meta property="og:title" content="Support Free 3D Printing | Vidit Bohra">
+<meta property="og:description" content="Printing 90 degree overhangs with no support material, on an unmodified 3-axis printer.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="../style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9881;</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="bar">
+    <a class="wordmark" href="../index.html">Vidit Bohra</a>
+    <nav class="topnav"><a class="back" href="../index.html">All work</a></nav>
+    <button id="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme"></button>
+  </div>
+</header>
+
+
+<main class="project-page">
+
+<section class="project-hero">
+  <div class="wrap narrow">
+    <p class="eyebrow">ME230, Prof. Ramesh Singh, IIT Bombay &middot; Jan 2026 to Apr 2026</p>
+    <h1>Support Free 3D Printing</h1>
+    <p class="tagline">Printing 90 degree overhangs with no support material, on an unmodified 3-axis printer.</p>
+    <ul class="tags big"><li>Python</li><li>G-code</li><li>Non planar slicing</li><li>FDM</li><li>SolidWorks</li></ul>
+  </div>
+  <div class="wrap">
+    <figure class="cover"><button class="media" data-full="../assets/support-free-printing/printed-part.jpg" aria-label="Enlarge image: A black 3D printed pipe with a 90 degree overhang, printed without supports"><img src="../assets/support-free-printing/printed-part.jpg" alt="A black 3D printed pipe with a 90 degree overhang, printed without supports" decoding="async"></button></figure>
+  </div>
+</section>
+
+<section class="writeup">
+  <div class="wrap narrow prose"><p>Printing a 90 degree overhang normally means printing supports, then cutting them off and cleaning up the scar they leave behind. This project prints them with no support at all, on an unmodified 3-axis FDM printer with no hardware changes.</p><p>All of the work happens in software. The STL is pre warped, sliced with an ordinary planar slicer, and the resulting G-code is put through a back transformation in Python so the nozzle traces conical non planar layers that support themselves as they build. The result is 25% less material, 20% shorter build time, and no post processing at all.</p></div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>Gallery</h2>
+    <div class="grid"><figure class="tile"><button class="media" data-full="../assets/support-free-printing/cad-model.jpg" aria-label="Enlarge image: The test part, a bent pipe with a true 90 degree overhang."><img src="../assets/support-free-printing/cad-model-thumb.jpg" alt="The test part, a bent pipe with a true 90 degree overhang." loading="lazy" decoding="async"></button><figcaption>The test part, a bent pipe with a true 90 degree overhang.</figcaption></figure><figure class="tile"><button class="media" data-full="../assets/support-free-printing/overhang-part.jpg" aria-label="Enlarge image: A thin unsupported overhang, printed in mid air."><img src="../assets/support-free-printing/overhang-part-thumb.jpg" alt="A thin unsupported overhang, printed in mid air." loading="lazy" decoding="async"></button><figcaption>A thin unsupported overhang, printed in mid air.</figcaption></figure><figure class="tile"><button class="media" data-full="../assets/support-free-printing/overhang-detail.jpg" aria-label="Enlarge image: Underside finish, with nothing to remove."><img src="../assets/support-free-printing/overhang-detail-thumb.jpg" alt="Underside finish, with nothing to remove." loading="lazy" decoding="async"></button><figcaption>Underside finish, with nothing to remove.</figcaption></figure><figure class="tile"><button class="media" data-full="../assets/support-free-printing/nozzle-angle.jpg" aria-label="Enlarge image: Measuring the achieved cone angle mid print."><img src="../assets/support-free-printing/nozzle-angle-thumb.jpg" alt="Measuring the achieved cone angle mid print." loading="lazy" decoding="async"></button><figcaption>Measuring the achieved cone angle mid print.</figcaption></figure><figure class="tile"><button class="media" data-full="../assets/support-free-printing/conical-part.jpg" aria-label="Enlarge image: Conical geometry used to validate the transformation."><img src="../assets/support-free-printing/conical-part-thumb.jpg" alt="Conical geometry used to validate the transformation." loading="lazy" decoding="async"></button><figcaption>Conical geometry used to validate the transformation.</figcaption></figure><figure class="tile"><button class="media video" data-video="../assets/support-free-printing/printing.mp4" aria-label="Play video: The conical toolpath running on an unmodified printer."><img src="../assets/support-free-printing/printing-poster.jpg" alt="The conical toolpath running on an unmodified printer." loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span></button><figcaption>The conical toolpath running on an unmodified printer.</figcaption></figure><figure class="tile"><button class="media video" data-video="../assets/support-free-printing/print-run.mp4" aria-label="Play video: Building the overhang layer by layer."><img src="../assets/support-free-printing/print-run-poster.jpg" alt="Building the overhang layer by layer." loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span></button><figcaption>Building the overhang layer by layer.</figcaption></figure><figure class="tile"><button class="media video" data-video="../assets/support-free-printing/nozzle-path.mp4" aria-label="Play video: The nozzle tracing a non planar path."><img src="../assets/support-free-printing/nozzle-path-poster.jpg" alt="The nozzle tracing a non planar path." loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span></button><figcaption>The nozzle tracing a non planar path.</figcaption></figure></div>
+  </div>
+</section>
+
+<nav class="pager">
+  <div class="wrap">
+    <a class="pager-link" href="state-estimation.html">
+      <span class="dir">Previous</span><span class="name">State Estimation on Lie Groups</span></a>
+    <a class="pager-link next" href="photoelasticity.html">
+      <span class="dir">Next</span><span class="name">Stress Concentration by Photoelasticity</span></a>
+  </div>
+</nav>
+
+</main>
+
+
+<footer id="contact">
+  <div class="wrap">
+    <h2>Get in touch</h2>
+    <p class="footer-line">Happy to talk about robotics, mechanism design or anything on this site.</p>
+    <div class="btns">
+      <a class="btn primary" href="mailto:bohravidit@gmail.com">bohravidit@gmail.com</a>
+      <a class="btn" href="https://github.com/IGotYourMonkey">GitHub</a>
+      <a class="btn" href="../resume.pdf">Download resume</a>
+    </div>
+  </div>
+</footer>
+
+<div id="lightbox" hidden>
+  <button id="lightbox-close" type="button" aria-label="Close">&times;</button>
+  <img id="lightbox-img" alt="">
+</div>
+
+<script src="../script.js"></script>
+</body>
+</html>

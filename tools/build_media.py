@@ -47,7 +47,7 @@ MANIFEST = {
             "Screencast from 06-25-2026 11_21_17 AM.webm": ("humanoid-sim", 2, 12),
         },
     },
-    "mrt": {
+    "mars-rover-arm": {
         "src": "mrt",
         "images": {
             "896348AA-302C-43DF-8A2B-08343EDB0DE3.JPG": "bevel-drive",
@@ -66,7 +66,7 @@ MANIFEST = {
             "Screen Recording 2025-10-07 133909.mp4": ("gearbox-cad", 0, None),
         },
     },
-    "biped": {
+    "bipedal-robot": {
         "src": "biped",
         "zip": "drive-download-20260810T113029Z-1-001.zip",
         "images": {
@@ -83,7 +83,7 @@ MANIFEST = {
             "Copy of D32731C9-D5DC-4748-B9F9-50868ACF700C.MP4": ("assembly", 0, 12),
         },
     },
-    "equivariant-filter": {
+    "state-estimation": {
         "src": "equivariance filter paper implementation",
         "images": {
             "trajectory_plot.png": "trajectory",
@@ -96,7 +96,7 @@ MANIFEST = {
             "Screen Recording 2026-08-10 173036.mp4": ("vio-run", 10, 12),
         },
     },
-    "support-free": {
+    "support-free-printing": {
         "src": "supprt free",
         "images": {
             "Screenshot 2026-05-02 172032.png": "cad-model",
@@ -112,7 +112,7 @@ MANIFEST = {
             "WhatsApp Video 2026-08-10 at 5.16.27 PM.mp4": ("nozzle-path", 3, 12),
         },
     },
-    "stress-concentration": {
+    "photoelasticity": {
         "src": "stress concentration",
         # Shot through a polariscope: a small lit disc on a mostly black frame.
         # Crop away the dead border, then lift the exposure so the fringes read.

@@ -1,9 +1,9 @@
-// Theme toggle, image lightbox, and one-video-at-a-time playback.
+// Theme toggle, image lightbox, and click to play video.
 
 (function () {
   'use strict';
 
-  /* ── Theme ─────────────────────────────────────────────────── */
+  /* ── Theme ─────────────────────────────────────────────── */
 
   var root = document.documentElement;
   var toggle = document.getElementById('theme-toggle');
@@ -12,69 +12,79 @@
   try { stored = localStorage.getItem('theme'); } catch (e) { /* private mode */ }
   if (stored) root.setAttribute('data-theme', stored);
 
-  function currentlyDark() {
+  function isDark() {
     var set = root.getAttribute('data-theme');
     if (set) return set === 'dark';
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   }
 
-  function paintToggle() {
-    toggle.textContent = currentlyDark() ? '☀' : '☾';
-  }
+  function paint() { toggle.textContent = isDark() ? '☀' : '☾'; }
 
   toggle.addEventListener('click', function () {
-    var next = currentlyDark() ? 'light' : 'dark';
+    var next = isDark() ? 'light' : 'dark';
     root.setAttribute('data-theme', next);
     try { localStorage.setItem('theme', next); } catch (e) { /* ignore */ }
-    paintToggle();
+    paint();
   });
 
-  paintToggle();
+  paint();
 
-  /* ── Lightbox ──────────────────────────────────────────────── */
+  /* ── Lightbox ──────────────────────────────────────────── */
 
   var box = document.getElementById('lightbox');
   var boxImg = document.getElementById('lightbox-img');
-  var lastOpener = null;
+  var opener = null;
 
-  function openLightbox(img) {
-    boxImg.src = img.dataset.full || img.src;
-    boxImg.alt = img.alt;
+  function open(button) {
+    opener = button;
+    boxImg.src = button.dataset.full;
+    boxImg.alt = button.querySelector('img').alt;
     box.hidden = false;
     document.body.style.overflow = 'hidden';
     document.getElementById('lightbox-close').focus();
   }
 
-  function closeLightbox() {
+  function close() {
     box.hidden = true;
     boxImg.src = '';
     document.body.style.overflow = '';
-    if (lastOpener) lastOpener.focus();
+    if (opener) opener.focus();
   }
 
-  document.querySelectorAll('.lightbox-open').forEach(function (button) {
-    button.addEventListener('click', function () {
-      lastOpener = button;
-      openLightbox(button.querySelector('img'));
-    });
+  box.addEventListener('click', close);
+  document.addEventListener('keydown', function (ev) {
+    if (ev.key === 'Escape' && !box.hidden) close();
   });
 
-  box.addEventListener('click', closeLightbox);
+  /* ── Media ─────────────────────────────────────────────── */
 
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape' && !box.hidden) closeLightbox();
-  });
+  // Videos sit in the grid as a poster image with a play badge, so a row of
+  // them reads as evenly as a row of photos. The real <video> is only built
+  // once someone asks for it, which also keeps the page weight down.
+  function play(button) {
+    var video = document.createElement('video');
+    video.src = button.dataset.video;
+    video.controls = true;
+    video.autoplay = true;
+    video.playsInline = true;
+    video.loop = true;
 
-  /* ── Video ─────────────────────────────────────────────────── */
-
-  // Several clips on screen at once gets noisy, so starting one stops the rest.
-  var videos = Array.prototype.slice.call(document.querySelectorAll('video'));
-
-  videos.forEach(function (video) {
     video.addEventListener('play', function () {
-      videos.forEach(function (other) {
+      document.querySelectorAll('video').forEach(function (other) {
         if (other !== video && !other.paused) other.pause();
       });
+    });
+
+    button.replaceChildren(video);
+    button.classList.add('playing');
+    button.style.cursor = 'default';
+  }
+
+  document.querySelectorAll('.media').forEach(function (button) {
+    button.addEventListener('click', function () {
+      if (button.classList.contains('playing')) return;
+      if (button.dataset.video) play(button);
+      else if (button.dataset.full) open(button);
     });
   });
 }());
