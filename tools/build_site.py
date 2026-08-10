@@ -163,7 +163,7 @@ PROJECTS = [
             ("image", "wrist-assembly", "The 2-DOF differential wrist, assembled."),
             ("image", "wrist-build", "The wrist with its lead screw and gripper drive."),
             ("image", "rover-cad", "Full rover chassis in CAD."),
-            ("video", "gearbox-cad", "Cycloidal gearbox walkthrough."),
+            ("video", "wrist-cad", "The 2-DOF differential wrist in CAD."),
             ("video", "linear-base-cad", "Linear base motion study."),
             ("video", "linear-base-demo", "The linear base running on hardware."),
         ],
@@ -434,16 +434,21 @@ def build_index():
 
     body = f"""
 <section class="hero">
-  <div class="wrap">
-    <p class="eyebrow">Mechanical engineering, IIT Bombay</p>
-    <h1>Vidit Bohra</h1>
-    {tagline}
-    <div class="btns">
-      <a class="btn primary" href="#projects">See my work</a>
-      <a class="btn" href="resume.pdf">Resume</a>
-      <a class="btn" href="mailto:{EMAIL}">Email</a>
-      <a class="btn" href="{GITHUB}">GitHub</a>
+  <div class="wrap hero-grid">
+    <div class="hero-text">
+      <p class="eyebrow">Mechanical engineering, IIT Bombay</p>
+      <h1>Vidit Bohra</h1>
+      {tagline}
+      <div class="btns">
+        <a class="btn primary" href="#projects">See my work</a>
+        <a class="btn" href="resume.pdf">Resume</a>
+        <a class="btn" href="mailto:{EMAIL}">Email</a>
+        <a class="btn" href="{GITHUB}">GitHub</a>
+      </div>
     </div>
+    <figure class="portrait" style="--ar:{ratio("me", "portrait")}">
+      <img src="assets/me/portrait-thumb.jpg" alt="Vidit Bohra" decoding="async">
+    </figure>
   </div>
 </section>
 

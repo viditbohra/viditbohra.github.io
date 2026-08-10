@@ -31,10 +31,6 @@
   800,
   600
  ],
- "mars-rover-arm/gearbox-cad": [
-  836,
-  720
- ],
  "mars-rover-arm/linear-base-cad": [
   936,
   720
@@ -57,6 +53,14 @@
  ],
  "mars-rover-arm/wrist-build": [
   600,
+  800
+ ],
+ "mars-rover-arm/wrist-cad": [
+  836,
+  720
+ ],
+ "me/portrait": [
+  648,
   800
  ],
  "photoelasticity/elliptical-hole": [

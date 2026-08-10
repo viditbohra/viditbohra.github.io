@@ -37,10 +37,14 @@ then open <http://localhost:8000>.
 
 `assets/` is generated. Do not edit it by hand.
 
-The originals live outside this repo in `C:\Users\bohra\Desktop\website\`, in the
+The originals live outside this repo in `C:\Users\bohra\Desktop\website\`, in the `me`,
 `biped`, `mrt`, `retargetting`, `equivariance filter paper implementation`,
 `stress concentration` and `supprt free` folders. They are deliberately not committed:
-314 MB of HEIC photos and raw video that browsers cannot display anyway.
+hundreds of MB of HEIC photos and raw video that browsers cannot display anyway.
+
+Deleting a source file is fine. Drop it from the manifest in `build_media.py` and from
+the matching `gallery` list in `build_site.py`, then run both. `build_site.py` refuses to
+build if a page still references media that was not produced.
 
 `tools/build_media.py` converts them into web ready assets. It decodes HEIC to JPEG,
 transcodes MOV and WebM to MP4 with a poster frame, bakes in EXIF rotation so photos are

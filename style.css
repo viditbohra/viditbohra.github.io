@@ -110,6 +110,22 @@ p { margin: 0; }
 
 .hero { padding: clamp(56px, 9vw, 104px) 0 clamp(40px, 6vw, 72px); }
 
+.hero-grid {
+  display: grid; gap: clamp(28px, 5vw, 64px);
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.portrait { margin: 0; }
+.portrait img {
+  width: clamp(180px, 22vw, 250px);
+  aspect-ratio: var(--ar, 4 / 5);
+  object-fit: cover; object-position: center 22%;
+  border-radius: 18px;
+  border: 1px solid var(--rule);
+  box-shadow: var(--shadow-l);
+}
+
 .eyebrow {
   font-size: .82rem; font-weight: 600; letter-spacing: .09em;
   text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
@@ -367,6 +383,13 @@ footer h2 { font-size: clamp(1.5rem, 3vw, 1.95rem); }
 
 @media (max-width: 900px) {
   .tile { flex-basis: calc(var(--ar) * 165px); }
+}
+
+@media (max-width: 760px) {
+  /* Stack the hero, portrait first so it is the first thing on a phone. */
+  .hero-grid { grid-template-columns: 1fr; justify-items: start; }
+  .portrait { order: -1; }
+  .portrait img { width: clamp(130px, 34vw, 170px); }
 }
 
 @media (max-width: 640px) {

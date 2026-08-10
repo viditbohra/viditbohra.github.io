@@ -39,6 +39,12 @@ VIDEO_MAX_SECONDS = 12
 # Maps each source filename to the output name used by build_site.py.
 # Videos carry (name, start_seconds, duration_seconds) to trim dead air.
 MANIFEST = {
+    "me": {
+        "src": "me",
+        "images": {
+            "IMG_0254.jpg": "portrait",
+        },
+    },
     "retargeting": {
         "src": "retargetting",
         "images": {
@@ -63,7 +69,7 @@ MANIFEST = {
             "IMG_3245.HEIC": "wrist-build",
         },
         "videos": {
-            "Screen Recording 2025-10-07 133909.mp4": ("gearbox-cad", 0, None),
+            "Screen Recording 2025-10-07 133909.mp4": ("wrist-cad", 0, None),
             "Screen Recording 2025-10-07 134343.mp4": ("linear-base-cad", 0, None),
             "IMG_2851.MOV": ("linear-base-demo", 0, None),
         },

@@ -1,5 +1,6 @@
-# The raw media folders live one level up and must never be committed —
-# 314 MB of HEIC and uncompressed video, well past GitHub's file size limit.
+# The raw media folders live one level up and must never be committed:
+# hundreds of MB of HEIC and uncompressed video, past GitHub's file size limit.
+/me/
 /biped/
 /mrt/
 /retargetting/
