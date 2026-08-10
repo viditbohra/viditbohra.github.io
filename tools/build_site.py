@@ -13,6 +13,7 @@ assets/dimensions.json, which build_media.py writes. That is what lets a row of
 mixed portrait and landscape media sit flush instead of leaving holes.
 """
 
+import hashlib
 import html
 import json
 import shutil
@@ -316,6 +317,22 @@ def e(text):
     return html.escape(str(text), quote=True)
 
 
+_digests = {}
+
+
+def asset(up, rel):
+    """URL for a file, tagged with a hash of its contents.
+
+    GitHub Pages serves these with a ten minute cache and the filenames never
+    change, so a browser will happily pair newly fetched HTML with a stale
+    stylesheet or an old image. Changing the query string whenever the bytes
+    change makes that impossible.
+    """
+    if rel not in _digests:
+        _digests[rel] = hashlib.md5((ROOT / rel).read_bytes()).hexdigest()[:8]
+    return f"{up}{rel}?v={_digests[rel]}"
+
+
 def ratio(slug, name):
     """Width over height of the displayed media, used to size gallery tiles."""
     w, h = DIMS[f"{slug}/{name}"]
@@ -340,7 +357,7 @@ def shell(title, description, body, depth=0):
 <meta property="og:title" content="{e(title)}">
 <meta property="og:description" content="{e(description)}">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="{up}style.css">
+<link rel="stylesheet" href="{asset(up, "style.css")}">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9881;</text></svg>">
 </head>
 <body>
@@ -372,23 +389,25 @@ def shell(title, description, body, depth=0):
   <img id="lightbox-img" alt="">
 </div>
 
-<script src="{up}script.js"></script>
+<script src="{asset(up, "script.js")}"></script>
 </body>
 </html>
 """
 
 
 def media_button(kind, slug, name, alt, up):
-    base = f"{up}assets/{slug}/{name}"
+    base = f"assets/{slug}/{name}"
     alt = e(alt)
     if kind == "video":
-        return (f'<button class="media video" data-video="{base}.mp4" '
+        return (f'<button class="media video" data-video="{asset(up, base + ".mp4")}" '
                 f'aria-label="Play video: {alt}">'
-                f'<img src="{base}-poster.jpg" alt="{alt}" loading="lazy" decoding="async">'
+                f'<img src="{asset(up, base + "-poster.jpg")}" alt="{alt}" '
+                f'loading="lazy" decoding="async">'
                 f'<span class="play" aria-hidden="true"></span></button>')
-    return (f'<button class="media" data-full="{base}.jpg" aria-label="Enlarge image: {alt}">'
-            f'<img src="{base}-thumb.jpg" alt="{alt}" loading="lazy" decoding="async">'
-            f"</button>")
+    return (f'<button class="media" data-full="{asset(up, base + ".jpg")}" '
+            f'aria-label="Enlarge image: {alt}">'
+            f'<img src="{asset(up, base + "-thumb.jpg")}" alt="{alt}" '
+            f'loading="lazy" decoding="async"></button>')
 
 
 def tile(kind, slug, name, caption, up):
@@ -420,7 +439,8 @@ def build_index():
     cards = []
     for p in PROJECTS:
         kind, name, alt = p["cover"]
-        img = f'assets/{p["slug"]}/{name}' + ("-poster.jpg" if kind == "video" else "-thumb.jpg")
+        img = asset("", f'assets/{p["slug"]}/{name}'
+                    + ("-poster.jpg" if kind == "video" else "-thumb.jpg"))
         tags = "".join(f"<li>{e(t)}</li>" for t in p["tags"][:3])
         cards.append(
             f'<a class="card" href="projects/{p["slug"]}.html">'
@@ -438,7 +458,7 @@ def build_index():
     body = f"""
 <header class="intro">
   <div class="wrap intro-inner">
-    <img class="avatar" src="assets/me/portrait-thumb.jpg" alt="Vidit Bohra" decoding="async">
+    <img class="avatar" src="{asset("", "assets/me/portrait-thumb.jpg")}" alt="Vidit Bohra" decoding="async">
     <div class="intro-text">
       <h1>Vidit Bohra</h1>
       <p class="role">Mechanical Engineering, IIT Bombay</p>
