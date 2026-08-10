@@ -41,6 +41,9 @@ VIDEO_MAX_SECONDS = 12
 MANIFEST = {
     "me": {
         "src": "me",
+        # Square crop centred on the face, so the circular frame on the page
+        # lands on a head and shoulders shot rather than the whole photo.
+        "face_crop": True,
         "images": {
             "IMG_0254.jpg": "portrait",
         },
@@ -147,7 +150,37 @@ def autocrop_dark_border(im: Image.Image, threshold: int = 70) -> Image.Image:
     ))
 
 
-def convert_image(src, dest_stem, brighten=None, autocrop=False):
+def square_on_face(im: Image.Image) -> Image.Image:
+    """Square crop framing the face: head with a little air above, shoulders below.
+
+    Falls back to an upper centre crop, which is where a face sits in a portrait
+    anyway, if the detector finds nothing.
+    """
+    import cv2
+    import numpy as np
+
+    grey = cv2.cvtColor(np.array(im.convert("RGB")), cv2.COLOR_RGB2GRAY)
+    cascade = cv2.CascadeClassifier(
+        cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+    )
+    faces = cascade.detectMultiScale(grey, scaleFactor=1.1, minNeighbors=6,
+                                     minSize=(int(im.width * 0.06),) * 2)
+
+    if len(faces):
+        x, y, w, h = max(faces, key=lambda f: f[2] * f[3])
+        side = min(int(w * 2.6), im.width, im.height)
+        cx = x + w / 2
+        cy = y + h / 2 + h * 0.32  # drop the centre so the chin is not on the edge
+    else:
+        side = min(im.width, im.height)
+        cx, cy = im.width / 2, side / 2
+
+    left = int(max(0, min(cx - side / 2, im.width - side)))
+    top = int(max(0, min(cy - side / 2, im.height - side)))
+    return im.crop((left, top, left + side, top + side))
+
+
+def convert_image(src, dest_stem, brighten=None, autocrop=False, face_crop=False):
     """Returns the (width, height) of the displayed thumbnail."""
     with Image.open(src) as im:
         im = ImageOps.exif_transpose(im)  # bake in rotation, do not trust the viewer
@@ -155,6 +188,8 @@ def convert_image(src, dest_stem, brighten=None, autocrop=False):
             im = im.convert("RGB")
         if autocrop:
             im = autocrop_dark_border(im)
+        if face_crop:
+            im = square_on_face(im)
         if brighten:
             im = ImageEnhance.Brightness(im).enhance(brighten)
             im = ImageEnhance.Contrast(im).enhance(1.1)
@@ -240,7 +275,8 @@ def main():
                     continue
                 try:
                     w, h = convert_image(path, dest_dir / out_name,
-                                         cfg.get("brighten"), cfg.get("autocrop", False))
+                                         cfg.get("brighten"), cfg.get("autocrop", False),
+                                         cfg.get("face_crop", False))
                     dims[f"{slug}/{out_name}"] = [w, h]
                     print(f"  img  {out_name}  {w}x{h}")
                 except Exception as exc:

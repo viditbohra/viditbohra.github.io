@@ -399,15 +399,19 @@ def tile(kind, slug, name, caption, up):
 
 
 def listing(items):
+    """Dates sit in a narrow left gutter, which scans far better than floating
+    them out to the right edge away from what they belong to."""
     rows = []
     for it in items:
         points = "".join(f"<li>{e(p)}</li>" for p in it.get("points", []))
         rows.append(
             f'<li class="row">'
-            f'<div class="row-head"><h3>{e(it["title"])}</h3>'
-            f'<span class="when">{e(it["when"])}</span></div>'
+            f'<p class="when">{e(it["when"])}</p>'
+            f'<div class="row-body">'
+            f'<h3>{e(it["title"])}</h3>'
             f'<p class="org">{e(it["org"])}</p>'
-            f'<ul class="points">{points}</ul></li>'
+            f'<ul class="points">{points}</ul>'
+            f"</div></li>"
         )
     return '<ul class="rows">' + "".join(rows) + "</ul>"
 
@@ -425,19 +429,19 @@ def build_index():
             f'<h3>{e(p["title"])}</h3>'
             f'<p class="card-sum">{e(p["summary"])}</p>'
             f'<ul class="tags">{tags}</ul>'
-            f'<span class="more">View project</span>'
             f"</div></a>"
         )
 
     skills = "".join(f'<div class="skill"><dt>{e(k)}</dt><dd>{e(v)}</dd></div>' for k, v in SKILLS)
-    tagline = "".join(f'<p class="tagline">{e(t)}</p>' for t in TAGLINE)
+    tagline = "".join(f"<p>{e(t)}</p>" for t in TAGLINE)
 
     body = f"""
-<section class="hero">
-  <div class="wrap hero-grid">
-    <div class="hero-text">
-      <p class="eyebrow">Mechanical engineering, IIT Bombay</p>
+<header class="intro">
+  <div class="wrap intro-inner">
+    <img class="avatar" src="assets/me/portrait-thumb.jpg" alt="Vidit Bohra" decoding="async">
+    <div class="intro-text">
       <h1>Vidit Bohra</h1>
+      <p class="role">Mechanical Engineering, IIT Bombay</p>
       {tagline}
       <div class="btns">
         <a class="btn primary" href="#projects">See my work</a>
@@ -446,15 +450,12 @@ def build_index():
         <a class="btn" href="{GITHUB}">GitHub</a>
       </div>
     </div>
-    <figure class="portrait" style="--ar:{ratio("me", "portrait")}">
-      <img src="assets/me/portrait-thumb.jpg" alt="Vidit Bohra" decoding="async">
-    </figure>
   </div>
-</section>
+</header>
 
 <main>
 
-<section id="education" class="band">
+<section id="education">
   <div class="wrap"><h2>Education</h2>{listing(EDUCATION)}</div>
 </section>
 
@@ -462,19 +463,18 @@ def build_index():
   <div class="wrap"><h2>Experience</h2>{listing(EXPERIENCE)}</div>
 </section>
 
-<section id="skills" class="band">
+<section id="skills">
   <div class="wrap"><h2>Skills</h2><dl class="skills">{skills}</dl></div>
 </section>
 
 <section id="projects">
   <div class="wrap">
     <h2>Projects</h2>
-    <p class="section-note">Six things I have designed, built or written. Open any one for photos, video and the details.</p>
     <div class="cards">{"".join(cards)}</div>
   </div>
 </section>
 
-<section id="other" class="band">
+<section id="other">
   <div class="wrap"><h2>Also worked on</h2>{listing(OTHER)}</div>
 </section>
 
@@ -502,25 +502,23 @@ def build_project(index):
     body = f"""
 <main class="project-page">
 
-<section class="project-hero">
-  <div class="wrap narrow">
-    <p class="eyebrow">{e(p["org"])} &middot; {e(p["when"])}</p>
-    <h1>{e(p["title"])}</h1>
-    <p class="tagline">{e(p["summary"])}</p>
-    <ul class="tags big">{tags}</ul>
-  </div>
+<header class="project-head">
   <div class="wrap">
+    <h1>{e(p["title"])}</h1>
+    <p class="role">{e(p["org"])} &middot; {e(p["when"])}</p>
+    <p class="summary">{e(p["summary"])}</p>
+    <ul class="tags">{tags}</ul>
     <figure class="cover" style="--ar:{ratio(p["slug"], name)}">
       {media_button(kind, p["slug"], name, alt, up)}
     </figure>
   </div>
-</section>
+</header>
 
 <section class="writeup">
-  <div class="wrap narrow prose">{paras}</div>
+  <div class="wrap"><div class="prose">{paras}</div></div>
 </section>
 
-<section class="band">
+<section>
   <div class="wrap">
     <h2>Gallery</h2>
     <div class="grid">{tiles}</div>

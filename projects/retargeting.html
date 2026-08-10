@@ -24,25 +24,23 @@
 
 <main class="project-page">
 
-<section class="project-hero">
-  <div class="wrap narrow">
-    <p class="eyebrow">GV Lab, University of Tokyo &middot; Jun 2026 to Jul 2026</p>
-    <h1>Human to Robot Motion Retargeting</h1>
-    <p class="tagline">Turning a phone video of a person handling an object into motion a robot can reproduce.</p>
-    <ul class="tags big"><li>HMR2 / 4D-Humans</li><li>SMPL</li><li>Holosoma</li><li>Inverse kinematics</li><li>Python</li></ul>
-  </div>
+<header class="project-head">
   <div class="wrap">
+    <h1>Human to Robot Motion Retargeting</h1>
+    <p class="role">GV Lab, University of Tokyo &middot; Jun 2026 to Jul 2026</p>
+    <p class="summary">Turning a phone video of a person handling an object into motion a robot can reproduce.</p>
+    <ul class="tags"><li>HMR2 / 4D-Humans</li><li>SMPL</li><li>Holosoma</li><li>Inverse kinematics</li><li>Python</li></ul>
     <figure class="cover" style="--ar:0.9139">
       <button class="media video" data-video="../assets/retargeting/pepper-sim.mp4" aria-label="Play video: A Pepper humanoid reproducing a captured human motion in simulation"><img src="../assets/retargeting/pepper-sim-poster.jpg" alt="A Pepper humanoid reproducing a captured human motion in simulation" loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span></button>
     </figure>
   </div>
-</section>
+</header>
 
 <section class="writeup">
-  <div class="wrap narrow prose"><p>An end to end pipeline that takes an ordinary monocular RGB video of someone handling an object and produces motion a robot can actually execute. Human pose comes from HMR2 (4D-Humans), joint positions are extracted through SMPL, and the motion is retargeted onto the robot using inverse kinematics in Holosoma. It runs on both a Pepper humanoid and a UR5 arm.</p><p>The hard part is what gets preserved. Copying joint angles between bodies with different proportions breaks the task, because the hand ends up in the wrong place relative to the object. This pipeline uses an interaction mesh formulation that encodes the spatial relationship between the human and the object, so the retargeted motion keeps the manipulation intact rather than just the pose.</p></div>
+  <div class="wrap"><div class="prose"><p>An end to end pipeline that takes an ordinary monocular RGB video of someone handling an object and produces motion a robot can actually execute. Human pose comes from HMR2 (4D-Humans), joint positions are extracted through SMPL, and the motion is retargeted onto the robot using inverse kinematics in Holosoma. It runs on both a Pepper humanoid and a UR5 arm.</p><p>The hard part is what gets preserved. Copying joint angles between bodies with different proportions breaks the task, because the hand ends up in the wrong place relative to the object. This pipeline uses an interaction mesh formulation that encodes the spatial relationship between the human and the object, so the retargeted motion keeps the manipulation intact rather than just the pose.</p></div></div>
 </section>
 
-<section class="band">
+<section>
   <div class="wrap">
     <h2>Gallery</h2>
     <div class="grid"><figure class="tile" style="--ar:1.3166"><button class="media video" data-video="../assets/retargeting/pepper-arms.mp4" aria-label="Play video: Retargeted arm motion on the Pepper humanoid."><img src="../assets/retargeting/pepper-arms-poster.jpg" alt="Retargeted arm motion on the Pepper humanoid." loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span></button><figcaption>Retargeted arm motion on the Pepper humanoid.</figcaption></figure><figure class="tile" style="--ar:0.9139"><button class="media video" data-video="../assets/retargeting/ur5-arm.mp4" aria-label="Play video: The same pipeline driving a UR5 arm."><img src="../assets/retargeting/ur5-arm-poster.jpg" alt="The same pipeline driving a UR5 arm." loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span></button><figcaption>The same pipeline driving a UR5 arm.</figcaption></figure><figure class="tile" style="--ar:1.0644"><button class="media video" data-video="../assets/retargeting/humanoid-sim.mp4" aria-label="Play video: A full humanoid reproducing the captured motion."><img src="../assets/retargeting/humanoid-sim-poster.jpg" alt="A full humanoid reproducing the captured motion." loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span></button><figcaption>A full humanoid reproducing the captured motion.</figcaption></figure><figure class="tile" style="--ar:1.0"><button class="media video" data-video="../assets/retargeting/smpl-body.mp4" aria-label="Play video: The SMPL body model recovered from the human motion."><img src="../assets/retargeting/smpl-body-poster.jpg" alt="The SMPL body model recovered from the human motion." loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span></button><figcaption>The SMPL body model recovered from the human motion.</figcaption></figure><figure class="tile plot" style="--ar:1.995"><button class="media" data-full="../assets/retargeting/point-cloud.jpg" aria-label="Enlarge image: Cleaned point cloud of the object, XZ and XY projections."><img src="../assets/retargeting/point-cloud-thumb.jpg" alt="Cleaned point cloud of the object, XZ and XY projections." loading="lazy" decoding="async"></button><figcaption>Cleaned point cloud of the object, XZ and XY projections.</figcaption></figure></div>
