@@ -6,10 +6,15 @@ All the words live in this file. Edit the content below and re-run:
 
 Six project pages share the same shell, so generating them keeps the header,
 navigation and gallery markup identical across all of them instead of drifting
-apart the way six hand-edited copies would.
+apart the way six hand edited copies would.
+
+Gallery tiles are sized from each image's real shape, read from
+assets/dimensions.json, which build_media.py writes. That is what lets a row of
+mixed portrait and landscape media sit flush instead of leaving holes.
 """
 
 import html
+import json
 import shutil
 import sys
 from pathlib import Path
@@ -18,33 +23,32 @@ ROOT = Path(__file__).resolve().parent.parent
 EMAIL = "bohravidit@gmail.com"
 GITHUB = "https://github.com/IGotYourMonkey"
 
+DIMS = json.loads((ROOT / "assets" / "dimensions.json").read_text())
+
 # ── Content ──────────────────────────────────────────────────────────────
 
-TAGLINE = (
+TAGLINE = [
     "Mechanical engineering undergraduate at IIT Bombay, minoring in Artificial "
-    "Intelligence and Data Science. I build robots: the mechanisms, the control "
-    "and estimation that run them, and the parts themselves."
-)
+    "Intelligence and Data Science, and in Systems and Control.",
+    "I build robots: the mechanisms, the control and estimation that run them, and "
+    "the parts themselves.",
+]
 
 EDUCATION = [
     {
         "title": "B.Tech, Mechanical Engineering",
         "org": "Indian Institute of Technology Bombay",
         "when": "2024 to 2028",
-        "note": "CPI 8.58. Minor in Artificial Intelligence and Data Science.",
+        "points": [
+            "CPI 8.58",
+            "Minor in Artificial Intelligence and Data Science",
+            "Minor in Systems and Control",
+        ],
     },
-    {
-        "title": "HSC",
-        "org": "Pace Junior Science College, Dadar",
-        "when": "2024",
-        "note": "86.67%",
-    },
-    {
-        "title": "ICSE",
-        "org": "Campion School",
-        "when": "2022",
-        "note": "96.20%",
-    },
+    {"title": "HSC", "org": "Pace Junior Science College, Dadar", "when": "2024",
+     "points": ["86.67%"]},
+    {"title": "ICSE", "org": "Campion School", "when": "2022",
+     "points": ["96.20%"]},
 ]
 
 EXPERIENCE = [
@@ -52,47 +56,48 @@ EXPERIENCE = [
         "title": "Subsystem Lead, Robotic Arm and LDT",
         "org": "Mars Rover Team, IIT Bombay",
         "when": "Apr 2026 to present",
-        "note": (
-            "Leading 15 undergraduates on a multi functional robotic arm using belt drives, "
-            "BLDC motors and a two stage planetary and cycloidal gearbox. Also mentoring the "
-            "quadruped and hexapod builds from concept to working prototype."
-        ),
+        "points": [
+            "Leading 15 undergraduates on a multi functional robotic arm",
+            "Built around belt drives, BLDC motors and a two stage planetary and cycloidal gearbox",
+            "Mentoring the quadruped and hexapod builds from concept to working prototype",
+        ],
     },
     {
         "title": "Research Intern",
         "org": "GV Lab, University of Tokyo",
         "when": "Jun 2026 to Jul 2026",
-        "note": (
-            "Built a human to robot motion retargeting pipeline under Prof. Gentiane Venture, "
-            "deployed on a Pepper humanoid and a UR5 arm."
-        ),
+        "points": [
+            "Built a human to robot motion retargeting pipeline under Prof. Gentiane Venture",
+            "Deployed it on a Pepper humanoid and a UR5 arm",
+        ],
     },
     {
         "title": "Senior Design Engineer, Robotic Arm Subsystem",
         "org": "Mars Rover Team, IIT Bombay",
         "when": "Apr 2025 to Apr 2026",
-        "note": (
-            "Designed the 5-DOF arm and its drivetrain: the cycloidal drive, differential "
-            "wrist, linear base and worm gear holding mechanism."
-        ),
+        "points": [
+            "Designed the 5-DOF arm and its full drivetrain",
+            "Custom two stage 81:1 cycloidal drive, and a 2-DOF differential wrist 35% lighter than the version it replaced",
+            "Worm drive in the explicit steering so joints hold position with no power applied",
+        ],
     },
     {
         "title": "Convener",
         "org": "Krittika, Astronomy Club, IIT Bombay",
         "when": "May 2025 to Mar 2026",
-        "note": (
-            "Designed a 2-DOF stand for the EdgeHD11 telescope in the institute observatory, "
-            "led sessions on coordinate systems and time, and ran outreach reaching over "
-            "10,000 people on National Space Day."
-        ),
+        "points": [
+            "Designed a custom 2-DOF stand for the EdgeHD11 telescope in the institute observatory",
+            "Led a learners' space session on coordinate systems and time",
+            "Ran outreach reaching over 10,000 people on National Space Day",
+        ],
     },
 ]
 
 SKILLS = [
-    ("Design and simulation", "SolidWorks, ANSYS, Fusion 360, MSC Adams, MATLAB, Simulink, Simscape Multibody"),
+    ("Design and simulation",
+     "SolidWorks, ANSYS, ANSYS Fluent, COMSOL, Fusion 360, MSC Adams, MATLAB, Simulink, Simscape Multibody"),
     ("Robotics", "ROS2, Isaac Lab, Holosoma, Gazebo, MuJoCo"),
-    ("Programming", "C, C++, Python, LaTeX"),
-    ("Manufacturing", "FDM 3D printing, PCB design in EasyEDA, photoelasticity, machining"),
+    ("Programming", "C, C++, Python, SQL, LaTeX"),
 ]
 
 PROJECTS = [
@@ -103,7 +108,7 @@ PROJECTS = [
         "when": "Jun 2026 to Jul 2026",
         "summary": "Turning a phone video of a person handling an object into motion a robot can reproduce.",
         "tags": ["HMR2 / 4D-Humans", "SMPL", "Holosoma", "Inverse kinematics", "Python"],
-        "cover": ("video", "pepper-sim", "A Pepper humanoid reproducing a human motion in simulation"),
+        "cover": ("video", "pepper-sim", "A Pepper humanoid reproducing a captured human motion in simulation"),
         "body": [
             "An end to end pipeline that takes an ordinary monocular RGB video of someone "
             "handling an object and produces motion a robot can actually execute. Human pose "
@@ -117,12 +122,11 @@ PROJECTS = [
             "retargeted motion keeps the manipulation intact rather than just the pose.",
         ],
         "gallery": [
-            ("video", "source-video", "The input: a single RGB video of the object being handled."),
-            ("video", "object-scan", "Raw geometry reconstructed from that video."),
-            ("video", "object-mesh", "The cleaned object mesh used for interaction."),
-            ("video", "smpl-body", "SMPL body model recovered from the human motion."),
-            ("video", "humanoid-sim", "The same pipeline driving a full humanoid."),
-            ("plot", "point-cloud", "Cleaned point cloud, XZ and XY projections."),
+            ("video", "pepper-arms", "Retargeted arm motion on the Pepper humanoid."),
+            ("video", "ur5-arm", "The same pipeline driving a UR5 arm."),
+            ("video", "humanoid-sim", "A full humanoid reproducing the captured motion."),
+            ("video", "smpl-body", "The SMPL body model recovered from the human motion."),
+            ("plot", "point-cloud", "Cleaned point cloud of the object, XZ and XY projections."),
         ],
     },
     {
@@ -136,32 +140,32 @@ PROJECTS = [
         "body": [
             "The manipulator on a semi autonomous rover built by a 30 person team to cross rough "
             "terrain and perform dexterous tasks at international competitions. I designed the "
-            "5-DOF arm and reworked most of its drivetrain: a custom two stage 81:1 cycloidal "
-            "drive for torque density, explicit steering for cleaner control, and a 2-DOF "
-            "differential wrist redesigned as a 3D print that came out 35% lighter and much "
-            "easier to manufacture.",
-            "Two failure modes shaped the rest of the design. The scaled up linear base kept "
-            "binding on tolerance stack up, so the rails were redesigned around the principle "
-            "used in optical disk drives to take the over constraint out. And because a power "
-            "loss would let the wrist drop under its own weight, a worm gear drive holds "
-            "position with no power applied.",
+            "5-DOF arm and reworked most of its drivetrain, including a custom two stage 81:1 "
+            "cycloidal drive for torque density and a 2-DOF differential wrist redesigned as a "
+            "3D print that came out 35% lighter and much easier to manufacture.",
+            "Each joint uses explicit steering, so a commanded angle maps to one actuator rather "
+            "than being shared across a coupled linkage, which keeps the control predictable. I "
+            "implemented a worm drive in the explicit steering for better control and "
+            "robustness. A worm cannot be back driven, so a joint holds its position under load "
+            "and stays where it is if power is lost, instead of collapsing under the weight of "
+            "the arm.",
+            "The linear base needed its own fix. Scaled up, it kept binding on tolerance stack "
+            "up, so the rails were redesigned around the principle used in optical disk drives "
+            "to take the over constraint out.",
             "With this rover the team placed 2nd at the European Rover Challenge against 24 "
             "teams from 15 countries, took 1st in the Astrobiology Mission at the International "
             "Rover Challenge, and finished 9th overall in the IRC against more than 35 "
             "institutions worldwide.",
         ],
         "gallery": [
-            ("image", "cycloidal-drive", "The two stage 81:1 cycloidal drive, assembled."),
-            ("image", "bevel-drive", "Bevel pair and worm drive. The worm is what prevents back drive."),
-            ("image", "cycloidal-assembly", "Output stage and pin ring."),
-            ("image", "differential-wrist", "The 2-DOF differential wrist, 35% lighter than the version it replaced."),
-            ("image", "linear-base", "Linear base hardware, rebuilt to eliminate binding."),
+            ("image", "arm-cad", "The full 5-DOF arm in CAD, with the linear base and gripper."),
+            ("image", "cycloidal-drive", "The two stage 81:1 cycloidal drive."),
+            ("image", "wrist-assembly", "The 2-DOF differential wrist, assembled."),
+            ("image", "wrist-build", "The wrist with its lead screw and gripper drive."),
             ("image", "rover-cad", "Full rover chassis in CAD."),
-            ("image", "rail-cad", "Rail base, laid out to remove the over constraint."),
             ("video", "gearbox-cad", "Cycloidal gearbox walkthrough."),
             ("video", "linear-base-cad", "Linear base motion study."),
-            ("video", "linear-base-demo", "The base running on hardware."),
-            ("video", "wrist-motor", "Wrist actuator under test."),
+            ("video", "linear-base-demo", "The linear base running on hardware."),
         ],
     },
     {
@@ -180,21 +184,18 @@ PROJECTS = [
             "stay upright.",
             "Control was approached three ways. A PPO policy trained in Isaac Lab, with a multi "
             "term reward covering velocity tracking, feet air time and joint limit penalties, "
-            "produced a stable walking gait in simulation. On hardware, inverse kinematics and "
-            "PID loops on an Arduino Mega with an MPU6050 handle real time balance. Alongside "
-            "those, a state space model fitted from Simscape at 85% fit drove a data driven "
-            "controller in Simulink, and an LQR controller on a linear inverted pendulum model "
-            "produced a stable gait analytically.",
+            "produced a stable walking gait in simulation. A state space model fitted from "
+            "Simscape at 85% fit drove a data driven controller in Simulink. And an LQR "
+            "controller on a linear inverted pendulum model produced a stable gait analytically. "
+            "On hardware, inverse kinematics and PID loops on an Arduino Mega with an MPU6050 "
+            "handle real time balance.",
         ],
         "gallery": [
             ("image", "cad-render", "The biped in CAD, trussed throughout to cut mass."),
-            ("image", "cad-assembly", "Exploded assembly during design."),
-            ("video", "rl-policy", "The trained PPO policy walking in simulation."),
-            ("video", "walking", "Walking on hardware."),
-            ("video", "balance-test", "Balance test with the IK and PID loops live."),
-            ("video", "gait-sim", "Gait study."),
-            ("video", "assembly", "Leg assembly and range of motion check."),
-            ("plot", "simulink-model", "The Simulink control model."),
+            ("video", "rl-policy", "The trained PPO policy walking in Isaac Lab."),
+            ("video", "data-driven-control", "The data driven controller running in simulation."),
+            ("video", "hardware-test", "Hardware test."),
+            ("plot", "simscape-model", "The Simscape multibody model."),
         ],
     },
     {
@@ -245,12 +246,7 @@ PROJECTS = [
         ],
         "gallery": [
             ("image", "cad-model", "The test part, a bent pipe with a true 90 degree overhang."),
-            ("image", "overhang-part", "A thin unsupported overhang, printed in mid air."),
-            ("image", "overhang-detail", "Underside finish, with nothing to remove."),
             ("image", "nozzle-angle", "Measuring the achieved cone angle mid print."),
-            ("image", "conical-part", "Conical geometry used to validate the transformation."),
-            ("video", "printing", "The conical toolpath running on an unmodified printer."),
-            ("video", "print-run", "Building the overhang layer by layer."),
             ("video", "nozzle-path", "The nozzle tracing a non planar path."),
         ],
     },
@@ -287,30 +283,29 @@ OTHER = [
         "title": "Holo-Battalion",
         "org": "e-Yantra Robotics Competition",
         "when": "Aug 2025 to present",
-        "note": (
-            "A swarm of three robots with articulated arms and omnidirectional drive, "
-            "coordinated over ROS2 with ArUco vision for pose estimation and centralized task "
-            "allocation to minimise total travel."
-        ),
+        "points": [
+            "A swarm of three robots, each with an articulated arm and omnidirectional holonomic drive",
+            "ROS2 server and client framework with ArUco marker vision and homography for pose estimation",
+            "Centralized task allocation by Euclidean proximity, minimising total travel",
+        ],
     },
     {
         "title": "Wildlife Detection from Camera Traps",
         "org": "DS203, IIT Bombay",
         "when": "Aug 2025 to Oct 2025",
-        "note": (
-            "An XGBoost pipeline 60% more accurate than a logistic regression baseline, "
-            "combining HOG, LBP, GLCM and ORB descriptors pruned to the 150 most predictive "
-            "features."
-        ),
+        "points": [
+            "An XGBoost pipeline 60% more accurate than a logistic regression baseline",
+            "HOG, LBP, GLCM and ORB descriptors pruned with SelectKBest to the 150 most predictive features",
+        ],
     },
     {
         "title": "Drone Remote Controller",
         "org": "Makerspace MS101, IIT Bombay",
         "when": "Jul 2024 to Nov 2024",
-        "note": (
-            "A joystick remote giving a drone prototype hover capability, with a custom ESP32 "
-            "PCB routed in EasyEDA, ARM switches and an OLED display."
-        ),
+        "points": [
+            "A joystick remote giving a drone prototype hover capability",
+            "Custom ESP32 PCB routed in EasyEDA with ARM switches and an OLED display",
+        ],
     },
 ]
 
@@ -321,16 +316,19 @@ def e(text):
     return html.escape(str(text), quote=True)
 
 
-def shell(title, description, body, depth=0, active=""):
+def ratio(slug, name):
+    """Width over height of the displayed media, used to size gallery tiles."""
+    w, h = DIMS[f"{slug}/{name}"]
+    return round(w / h, 4)
+
+
+def shell(title, description, body, depth=0):
     up = "../" * depth
-    nav_items = [("Projects", "#projects"), ("Experience", "#experience"), ("Contact", "#contact")]
     if depth:
         nav = f'<a class="back" href="{up}index.html">All work</a>'
     else:
-        nav = "".join(
-            f'<a href="{href}"{" class=\"on\"" if active == label else ""}>{label}</a>'
-            for label, href in nav_items
-        )
+        nav = ('<a href="#projects">Projects</a><a href="#experience">Experience</a>'
+               '<a href="#contact">Contact</a>')
 
     return f"""<!doctype html>
 <html lang="en">
@@ -380,37 +378,36 @@ def shell(title, description, body, depth=0, active=""):
 """
 
 
-def tile(kind, slug, name, caption, up):
-    """One media cell. Videos show their poster with a play badge until clicked."""
+def media_button(kind, slug, name, alt, up):
     base = f"{up}assets/{slug}/{name}"
-    cls = "tile wide" if kind == "plot" else "tile"
-    alt = e(caption)
-
+    alt = e(alt)
     if kind == "video":
-        inner = (
-            f'<button class="media video" data-video="{base}.mp4" '
-            f'aria-label="Play video: {alt}">'
-            f'<img src="{base}-poster.jpg" alt="{alt}" loading="lazy" decoding="async">'
-            f'<span class="play" aria-hidden="true"></span></button>'
-        )
-    else:
-        inner = (
-            f'<button class="media" data-full="{base}.jpg" aria-label="Enlarge image: {alt}">'
+        return (f'<button class="media video" data-video="{base}.mp4" '
+                f'aria-label="Play video: {alt}">'
+                f'<img src="{base}-poster.jpg" alt="{alt}" loading="lazy" decoding="async">'
+                f'<span class="play" aria-hidden="true"></span></button>')
+    return (f'<button class="media" data-full="{base}.jpg" aria-label="Enlarge image: {alt}">'
             f'<img src="{base}-thumb.jpg" alt="{alt}" loading="lazy" decoding="async">'
-            f"</button>"
-        )
+            f"</button>")
 
-    return f'<figure class="{cls}">{inner}<figcaption>{e(caption)}</figcaption></figure>'
+
+def tile(kind, slug, name, caption, up):
+    cls = "tile plot" if kind == "plot" else "tile"
+    return (f'<figure class="{cls}" style="--ar:{ratio(slug, name)}">'
+            f'{media_button(kind, slug, name, caption, up)}'
+            f"<figcaption>{e(caption)}</figcaption></figure>")
 
 
 def listing(items):
     rows = []
     for it in items:
-        note = f'<p class="note">{e(it["note"])}</p>' if it.get("note") else ""
+        points = "".join(f"<li>{e(p)}</li>" for p in it.get("points", []))
         rows.append(
             f'<li class="row">'
-            f'<div class="row-head"><h3>{e(it["title"])}</h3><span class="when">{e(it["when"])}</span></div>'
-            f'<p class="org">{e(it["org"])}</p>{note}</li>'
+            f'<div class="row-head"><h3>{e(it["title"])}</h3>'
+            f'<span class="when">{e(it["when"])}</span></div>'
+            f'<p class="org">{e(it["org"])}</p>'
+            f'<ul class="points">{points}</ul></li>'
         )
     return '<ul class="rows">' + "".join(rows) + "</ul>"
 
@@ -432,16 +429,15 @@ def build_index():
             f"</div></a>"
         )
 
-    skills = "".join(
-        f'<div class="skill"><dt>{e(k)}</dt><dd>{e(v)}</dd></div>' for k, v in SKILLS
-    )
+    skills = "".join(f'<div class="skill"><dt>{e(k)}</dt><dd>{e(v)}</dd></div>' for k, v in SKILLS)
+    tagline = "".join(f'<p class="tagline">{e(t)}</p>' for t in TAGLINE)
 
     body = f"""
 <section class="hero">
   <div class="wrap">
     <p class="eyebrow">Mechanical engineering, IIT Bombay</p>
     <h1>Vidit Bohra</h1>
-    <p class="tagline">{e(TAGLINE)}</p>
+    {tagline}
     <div class="btns">
       <a class="btn primary" href="#projects">See my work</a>
       <a class="btn" href="resume.pdf">Resume</a>
@@ -454,24 +450,15 @@ def build_index():
 <main>
 
 <section id="education" class="band">
-  <div class="wrap">
-    <h2>Education</h2>
-    {listing(EDUCATION)}
-  </div>
+  <div class="wrap"><h2>Education</h2>{listing(EDUCATION)}</div>
 </section>
 
 <section id="experience">
-  <div class="wrap">
-    <h2>Experience</h2>
-    {listing(EXPERIENCE)}
-  </div>
+  <div class="wrap"><h2>Experience</h2>{listing(EXPERIENCE)}</div>
 </section>
 
 <section id="skills" class="band">
-  <div class="wrap">
-    <h2>Skills</h2>
-    <dl class="skills">{skills}</dl>
-  </div>
+  <div class="wrap"><h2>Skills</h2><dl class="skills">{skills}</dl></div>
 </section>
 
 <section id="projects">
@@ -483,10 +470,7 @@ def build_index():
 </section>
 
 <section id="other" class="band">
-  <div class="wrap">
-    <h2>Also worked on</h2>
-    {listing(OTHER)}
-  </div>
+  <div class="wrap"><h2>Also worked on</h2>{listing(OTHER)}</div>
 </section>
 
 </main>
@@ -502,20 +486,6 @@ def build_project(index):
     p = PROJECTS[index]
     up = "../"
     kind, name, alt = p["cover"]
-    cover_src = f'{up}assets/{p["slug"]}/{name}' + ("-poster.jpg" if kind == "video" else ".jpg")
-
-    if kind == "video":
-        cover = (
-            f'<button class="media video" data-video="{up}assets/{p["slug"]}/{name}.mp4" '
-            f'aria-label="Play video: {e(alt)}">'
-            f'<img src="{cover_src}" alt="{e(alt)}" decoding="async">'
-            f'<span class="play" aria-hidden="true"></span></button>'
-        )
-    else:
-        cover = (
-            f'<button class="media" data-full="{cover_src}" aria-label="Enlarge image: {e(alt)}">'
-            f'<img src="{cover_src}" alt="{e(alt)}" decoding="async"></button>'
-        )
 
     tags = "".join(f"<li>{e(t)}</li>" for t in p["tags"])
     paras = "".join(f"<p>{e(t)}</p>" for t in p["body"])
@@ -535,7 +505,9 @@ def build_project(index):
     <ul class="tags big">{tags}</ul>
   </div>
   <div class="wrap">
-    <figure class="cover">{cover}</figure>
+    <figure class="cover" style="--ar:{ratio(p["slug"], name)}">
+      {media_button(kind, p["slug"], name, alt, up)}
+    </figure>
   </div>
 </section>
 
@@ -565,6 +537,16 @@ def build_project(index):
 
 
 def main():
+    # Fail loudly if the content references media that build_media.py did not produce.
+    missing = []
+    for p in PROJECTS:
+        for _, name, _ in [p["cover"]] + [(k, n, c) for k, n, c in p["gallery"]]:
+            if f'{p["slug"]}/{name}' not in DIMS:
+                missing.append(f'{p["slug"]}/{name}')
+    if missing:
+        print("Referenced media not built:", *missing, sep="\n  ")
+        return 1
+
     (ROOT / "index.html").write_text(build_index(), encoding="utf-8")
     print("index.html")
 

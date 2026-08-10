@@ -1,0 +1,150 @@
+{
+ "bipedal-robot/cad-render": [
+  775,
+  800
+ ],
+ "bipedal-robot/data-driven-control": [
+  1308,
+  720
+ ],
+ "bipedal-robot/hardware": [
+  600,
+  800
+ ],
+ "bipedal-robot/hardware-test": [
+  406,
+  720
+ ],
+ "bipedal-robot/rl-policy": [
+  406,
+  720
+ ],
+ "bipedal-robot/simscape-model": [
+  800,
+  483
+ ],
+ "mars-rover-arm/arm-cad": [
+  800,
+  669
+ ],
+ "mars-rover-arm/cycloidal-drive": [
+  800,
+  600
+ ],
+ "mars-rover-arm/gearbox-cad": [
+  836,
+  720
+ ],
+ "mars-rover-arm/linear-base-cad": [
+  936,
+  720
+ ],
+ "mars-rover-arm/linear-base-demo": [
+  406,
+  720
+ ],
+ "mars-rover-arm/rover-cad": [
+  800,
+  432
+ ],
+ "mars-rover-arm/rover-field": [
+  800,
+  600
+ ],
+ "mars-rover-arm/wrist-assembly": [
+  450,
+  800
+ ],
+ "mars-rover-arm/wrist-build": [
+  600,
+  800
+ ],
+ "photoelasticity/elliptical-hole": [
+  780,
+  800
+ ],
+ "photoelasticity/elliptical-hole-detail": [
+  772,
+  800
+ ],
+ "photoelasticity/filleted-hole": [
+  800,
+  781
+ ],
+ "photoelasticity/square-hole": [
+  658,
+  800
+ ],
+ "photoelasticity/square-hole-detail": [
+  646,
+  800
+ ],
+ "photoelasticity/square-hole-wide": [
+  605,
+  800
+ ],
+ "retargeting/humanoid-sim": [
+  760,
+  714
+ ],
+ "retargeting/pepper-arms": [
+  840,
+  638
+ ],
+ "retargeting/pepper-sim": [
+  658,
+  720
+ ],
+ "retargeting/point-cloud": [
+  800,
+  401
+ ],
+ "retargeting/smpl-body": [
+  640,
+  640
+ ],
+ "retargeting/ur5-arm": [
+  658,
+  720
+ ],
+ "state-estimation/allan-deviation": [
+  800,
+  427
+ ],
+ "state-estimation/camera-imu-rig": [
+  800,
+  702
+ ],
+ "state-estimation/landmark-map": [
+  800,
+  717
+ ],
+ "state-estimation/rig-detail": [
+  800,
+  600
+ ],
+ "state-estimation/trajectory": [
+  800,
+  369
+ ],
+ "state-estimation/vio-run": [
+  1236,
+  720
+ ],
+ "support-free-printing/cad-model": [
+  800,
+  571
+ ],
+ "support-free-printing/nozzle-angle": [
+  800,
+  452
+ ],
+ "support-free-printing/nozzle-path": [
+  1024,
+  576
+ ],
+ "support-free-printing/printed-part": [
+  593,
+  373
+ ]
+}

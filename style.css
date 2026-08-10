@@ -174,15 +174,27 @@ section > .wrap > h2 + .skills { margin-top: 30px; }
 }
 
 .org { color: var(--text); font-size: .93rem; font-weight: 540; }
-.note { color: var(--muted); font-size: .95rem; margin-top: 8px; max-width: 52rem; }
+
+.points {
+  list-style: none; margin: 10px 0 0; padding: 0;
+  color: var(--muted); font-size: .95rem; max-width: 54rem;
+}
+.points li { position: relative; padding-left: 18px; margin-bottom: 4px; }
+.points li:last-child { margin-bottom: 0; }
+.points li::before {
+  content: ""; position: absolute; left: 2px; top: .62em;
+  width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
+}
 
 /* ── Skills ──────────────────────────────────────────────── */
 
+/* The column gap has to be wide: without it a wrapped line in one column reads
+   as if it continues into the next. */
 .skills {
-  margin: 0; display: grid; gap: 2px;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  margin: 0; display: grid; gap: 26px 56px;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
 }
-.skill { padding: 18px 0; }
+.skill { padding: 4px 0; }
 .skills dt {
   font-size: .78rem; font-weight: 620; letter-spacing: .08em;
   text-transform: uppercase; color: var(--faint); margin-bottom: 7px;
@@ -237,12 +249,11 @@ section > .wrap > h2 + .skills { margin-top: 30px; }
 .project-hero h1 { font-size: clamp(2rem, 5vw, 3rem); }
 .project-hero .tagline { font-size: 1.1rem; margin-top: 14px; }
 
-.cover {
-  margin: 40px 0 0;
-  border: 1px solid var(--rule); border-radius: var(--r);
-  overflow: hidden; background: var(--raised); box-shadow: var(--shadow);
+.cover { margin: 40px 0 0; }
+.cover .media {
+  aspect-ratio: var(--ar, 16 / 9); max-height: 560px;
+  border-radius: var(--r); box-shadow: var(--shadow); cursor: pointer;
 }
-.cover .media { aspect-ratio: 16 / 9; }
 
 .writeup { padding: clamp(36px, 5vw, 56px) 0; }
 .prose p { margin-bottom: 20px; color: var(--text); font-size: 1.05rem; }
@@ -250,20 +261,34 @@ section > .wrap > h2 + .skills { margin-top: 30px; }
 
 /* ── Media grid ──────────────────────────────────────────── */
 
+/* A justified gallery. Each tile is sized from its real aspect ratio (--ar, set
+   per figure by the generator) and allowed to grow, so every row ends flush at
+   both edges instead of leaving a hole where a grid ran out of items. Mixing
+   portrait and landscape media is then fine: they share a row height and differ
+   in width, the way a photo gallery should. */
 .grid {
-  display: grid; gap: 22px; margin-top: 30px;
-  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  display: flex; flex-wrap: wrap; gap: 18px; margin-top: 30px;
 }
 
-.tile { margin: 0; }
-/* Plots run the full width of the grid. Spanning only some of the columns
-   left a dead gap beside them. */
-.tile.wide { grid-column: 1 / -1; }
+.tile {
+  margin: 0;
+  /* Width proportional to --ar means every tile in a row lands on the same
+     height. The grow factor is scaled up because flexbox only distributes a
+     fraction of the free space when the factors in a line sum to under 1,
+     which left a lone item on a last row stranded at half width. */
+  flex: calc(var(--ar) * 10) 1 calc(var(--ar) * 200px);
+}
 
-/* Every media cell is a button so it works from the keyboard as well. */
+/* Plots and diagrams carry fine detail, so they get a row to themselves. */
+.tile.plot { flex-basis: 100%; }
+
+/* Every media cell is a button so it works from the keyboard as well.
+   The box takes the media's own aspect ratio, so nothing is cropped.
+   max-height stops a lone portrait item on a last row from filling the screen. */
 .media {
   position: relative; display: block; width: 100%; padding: 0;
-  aspect-ratio: 4 / 3; overflow: hidden; cursor: pointer;
+  aspect-ratio: var(--ar, 4 / 3); max-height: 520px;
+  overflow: hidden; cursor: pointer;
   border: 1px solid var(--rule); border-radius: 10px;
   background: var(--raised);
   transition: border-color .2s, box-shadow .2s;
@@ -272,11 +297,11 @@ section > .wrap > h2 + .skills { margin-top: 30px; }
 .media img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
 .media:hover img { transform: scale(1.03); }
 
-/* Plots and block diagrams lose their axes to a cover crop, so show them whole.
-   They are drawn on white, so the cell stays white in both themes. */
-.tile.wide .media { aspect-ratio: 16 / 6.5; background: #fff; }
-.tile.wide .media img { object-fit: contain; padding: 8px; }
-.tile.wide .media:hover img { transform: none; }
+/* Plots are drawn on white, so the cell stays white in both themes and the
+   whole figure is shown rather than zoomed on hover. */
+.tile.plot .media { background: #fff; max-height: 600px; }
+.tile.plot .media img { object-fit: contain; padding: 10px; }
+.tile.plot .media:hover img { transform: none; }
 
 .play {
   position: absolute; inset: 0; margin: auto;
@@ -340,9 +365,8 @@ footer h2 { font-size: clamp(1.5rem, 3vw, 1.95rem); }
 
 /* ── Small screens ───────────────────────────────────────── */
 
-@media (max-width: 800px) {
-  .tile.wide { grid-column: span 1; }
-  .tile.wide .media { aspect-ratio: 4 / 3; }
+@media (max-width: 900px) {
+  .tile { flex-basis: calc(var(--ar) * 165px); }
 }
 
 @media (max-width: 640px) {
@@ -352,7 +376,9 @@ footer h2 { font-size: clamp(1.5rem, 3vw, 1.95rem); }
   .topnav { gap: 15px; }
   .topnav a { font-size: .87rem; }
   .cards { grid-template-columns: 1fr; gap: 20px; }
-  .grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid { gap: 12px; }
+  .tile { flex-basis: calc(var(--ar) * 120px); min-width: 130px; }
+  .media, .tile.plot .media, .cover .media { max-height: 380px; }
   figcaption { font-size: .8rem; }
   .pager .wrap { grid-template-columns: 1fr; }
   .pager-link.next { text-align: left; }
