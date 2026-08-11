@@ -29,8 +29,7 @@ DIMS = json.loads((ROOT / "assets" / "dimensions.json").read_text())
 # ── Content ──────────────────────────────────────────────────────────────
 
 TAGLINE = [
-    "Mechanical engineering undergraduate at IIT Bombay, minoring in Artificial "
-    "Intelligence and Data Science, and in Systems and Control.",
+    "Minoring in Artificial Intelligence and Data Science, and in Systems and Control.",
     "I build robots: the mechanisms, the control and estimation that run them, and "
     "the parts themselves.",
 ]
@@ -51,6 +50,74 @@ EDUCATION = [
     {"title": "ICSE", "org": "Campion School", "when": "2022",
      "points": ["96.20%"]},
 ]
+
+# Taken from the ASC transcript, grouped by subject rather than by semester,
+# since what a course covers is what a reader cares about. Codes and titles are
+# exactly as the transcript records them.
+#
+# Left out on purpose: the zero credit administrative entries (TASET, NCC/NSS/NSO,
+# Gender in the Workplace), which are not courses in any useful sense.
+COURSEWORK = [
+    ("Systems and control, minor", [
+        ("ME 319", "Control Systems"),
+        ("SC 625", "Systems Theory"),
+        ("SC 651", "Estimation on Lie Groups"),
+    ]),
+    ("AI and data science, minor", [
+        ("ME 228", "Applied Data Science and Machine Learning"),
+        ("DS 203", "Programming for Data Science"),
+        ("CS 101", "Computer Programming and Utilization"),
+    ]),
+    ("Mechanics and solids", [
+        ("ME 601", "Stress Analysis"),
+        ("ME 223", "Solid Mechanics and Strength of Materials"),
+        ("ME 218", "Solid Mechanics Lab"),
+        ("ME 221", "Structural Materials"),
+        ("ME 104", "Engineering Mechanics"),
+    ]),
+    ("Thermal and fluids", [
+        ("ME 415", "Computational Fluid Dynamics and Heat Transfer"),
+        ("ME 346", "Heat Transfer"),
+        ("ME 306", "Applied Thermodynamics"),
+        ("ME 209", "Thermodynamics"),
+        ("ME 219", "Fluid Mechanics"),
+        ("ME 224", "Fluid Mechanics Lab"),
+    ]),
+    ("Manufacturing and materials", [
+        ("ME 323", "Thermal and Chemical Processing of Materials"),
+        ("ME 230", "Mechanical Processing of Materials"),
+        ("ME 374", "Manufacturing Processes Lab"),
+        ("ME 213", "Manufacturing Practice Lab"),
+    ]),
+    ("Design and making", [
+        ("ME 444", "Analysis and Design of Mechanical Systems"),
+        ("DE 250", "Design Thinking for Innovation"),
+        ("MS 101", "Makerspace"),
+        ("ME 103", "Mechanical Engineering Introductory Course"),
+    ]),
+    ("Mathematics and physics", [
+        ("MA 105", "Calculus"),
+        ("MA 110", "Linear Algebra and Differential Equations"),
+        ("ME 225", "Numerical Analysis"),
+        ("PH 401", "Classical Mechanics"),
+        ("PH 117", "Physics Lab"),
+    ]),
+    ("Institute core", [
+        ("EC 101", "Economics"),
+        ("SOM 101", "Introduction to Management"),
+        ("HS 110", "Introduction to Psychology"),
+        ("BB 101", "Biology"),
+        ("CH 117", "Chemistry Lab"),
+        ("ES 250", "Environmental Studies"),
+    ]),
+]
+
+# Registered for the current semester, so they are marked rather than presented
+# as finished.
+CURRENT_COURSES = {
+    "ME 224", "ME 306", "ME 319", "ME 323", "ME 346", "ME 374", "ME 415",
+    "ME 601", "SC 625",
+}
 
 EXPERIENCE = [
     {
@@ -435,6 +502,21 @@ def listing(items):
     return '<ul class="rows">' + "".join(rows) + "</ul>"
 
 
+def coursework(groups):
+    """Course codes in a narrow gutter, titles aligned in a column beside them,
+    the same shape as the dates in a row list."""
+    cols = []
+    for heading, items in groups:
+        rows = []
+        for code, title in items:
+            mark = ' <span class="now">now</span>' if code in CURRENT_COURSES else ""
+            rows.append(f'<li><span class="code">{e(code)}</span>'
+                        f"<span>{e(title)}{mark}</span></li>")
+        cols.append(f'<div class="course-group"><h3>{e(heading)}</h3>'
+                    f'<ul>{"".join(rows)}</ul></div>')
+    return '<div class="courses">' + "".join(cols) + "</div>"
+
+
 def build_index():
     cards = []
     for p in PROJECTS:
@@ -461,7 +543,7 @@ def build_index():
     <img class="avatar" src="{asset("", "assets/me/portrait-thumb.jpg")}" alt="Vidit Bohra" decoding="async">
     <div class="intro-text">
       <h1>Vidit Bohra</h1>
-      <p class="role">Mechanical Engineering, IIT Bombay</p>
+      <p class="role">Third year Mechanical Engineering undergraduate, IIT Bombay</p>
       {tagline}
       <div class="btns">
         <a class="btn primary" href="#projects">See my work</a>
@@ -477,6 +559,14 @@ def build_index():
 
 <section id="education">
   <div class="wrap"><h2>Education</h2>{listing(EDUCATION)}</div>
+</section>
+
+<section id="coursework">
+  <div class="wrap">
+    <h2>Coursework</h2>
+    <p class="section-note">Courses marked <span class="now">now</span> are running this semester.</p>
+    {coursework(COURSEWORK)}
+  </div>
 </section>
 
 <section id="experience">
@@ -502,7 +592,8 @@ def build_index():
 """
     return shell(
         "Vidit Bohra",
-        "Mechanical engineering at IIT Bombay. Robotics, mechanism design, control and estimation.",
+        "Third year mechanical engineering at IIT Bombay. Robotics, mechanism "
+        "design, control and estimation.",
         body,
     )
 
