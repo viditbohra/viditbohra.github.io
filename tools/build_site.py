@@ -60,6 +60,7 @@ EDUCATION = [
 COURSEWORK = [
     ("Systems and control, minor", [
         ("ME 319", "Control Systems"),
+        ("SC 602", "Control of Nonlinear Dynamical Systems"),
         ("SC 625", "Systems Theory"),
         ("SC 651", "Estimation on Lie Groups"),
     ]),
