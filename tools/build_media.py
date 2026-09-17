@@ -27,7 +27,7 @@ from PIL import Image, ImageEnhance, ImageOps
 pillow_heif.register_heif_opener()
 
 FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()
-SRC = Path(r"C:\Users\bohra\Desktop\website")
+SRC = Path(__file__).resolve().parent.parent.parent
 OUT = Path(__file__).resolve().parent.parent / "assets"
 
 FULL_EDGE = 1600
@@ -84,6 +84,7 @@ MANIFEST = {
             "IMG_2663.PNG": "cad-render",
             "IMG_2642.HEIC": "hardware",
             "Copy of Screenshot 2026-03-12 002903.png": "simscape-model",
+            "IMG_6675.HEIC": "leg-test-rig",
         },
         "videos": {
             "Copy of 1FDEAA22-C683-4F28-80E6-9BB075416F7F.MP4": ("rl-policy", 0, 12),
@@ -101,7 +102,11 @@ MANIFEST = {
             "allan_deviation.png": "allan-deviation",
         },
         "videos": {
-            "Screen Recording 2026-08-10 173036.mp4": ("vio-run", 10, 12),
+            # The first 20 seconds are the camera pointed at a blank ceiling, with
+            # almost nothing to track. Skipping them starts the clip on the desk
+            # scene and runs to the end of the recording, which is where the
+            # filter is actually doing visible work.
+            "Screen Recording 2026-08-10 173036.mp4": ("vio-run", 20, 70),
         },
     },
     "support-free-printing": {

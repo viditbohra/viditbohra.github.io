@@ -15,6 +15,10 @@
   406,
   720
  ],
+ "bipedal-robot/leg-test-rig": [
+  600,
+  800
+ ],
  "bipedal-robot/rl-policy": [
   406,
   720

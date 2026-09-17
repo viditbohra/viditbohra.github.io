@@ -261,6 +261,7 @@ PROJECTS = [
         ],
         "gallery": [
             ("image", "cad-render", "The biped in CAD, trussed throughout to cut mass."),
+            ("image", "leg-test-rig", "The legs on a standalone test rig, with the hip rack and pinion and carbon fibre tubes visible."),
             ("video", "rl-policy", "The trained PPO policy walking in Isaac Lab."),
             ("video", "data-driven-control", "The data driven controller running in simulation."),
             ("video", "hardware-test", "Hardware test."),
