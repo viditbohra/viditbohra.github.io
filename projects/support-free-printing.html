@@ -8,7 +8,10 @@
 <meta property="og:title" content="Support Free 3D Printing | Vidit Bohra">
 <meta property="og:description" content="Printing 90 degree overhangs with no support material, on an unmodified 3-axis printer.">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="../style.css?v=26b130a5">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css?v=adb5a4c7">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9881;</text></svg>">
 </head>
 <body>
@@ -26,10 +29,15 @@
 
 <header class="project-head">
   <div class="wrap">
+    <p class="project-num mono">05 / 06</p>
     <h1>Support Free 3D Printing</h1>
-    <p class="role">ME230, Prof. Ramesh Singh, IIT Bombay &middot; Jan 2026 to Apr 2026</p>
     <p class="summary">Printing 90 degree overhangs with no support material, on an unmodified 3-axis printer.</p>
+    <ul class="annot">
+      <li><span class="k">ROLE</span><span class="v">ME230, Prof. Ramesh Singh, IIT Bombay</span></li>
+      <li><span class="k">WHEN</span><span class="v">Jan 2026 to Apr 2026</span></li>
+    </ul>
     <ul class="tags"><li>Python</li><li>G-code</li><li>Non planar slicing</li><li>FDM</li><li>SolidWorks</li></ul>
+    <div class="stats"><div class="stat"><div class="n mono">25%</div><div class="l">Less material</div></div><div class="stat"><div class="n mono">20%</div><div class="l">Shorter build time</div></div></div>
     <figure class="cover" style="--ar:1.5898">
       <button class="media" data-full="../assets/support-free-printing/printed-part.jpg?v=b6e73134" aria-label="Enlarge image: A black 3D printed pipe with a 90 degree overhang, printed without supports"><img src="../assets/support-free-printing/printed-part-thumb.jpg?v=dcfb5b46" alt="A black 3D printed pipe with a 90 degree overhang, printed without supports" loading="lazy" decoding="async"></button>
     </figure>
@@ -37,22 +45,25 @@
 </header>
 
 <section class="writeup">
-  <div class="wrap"><div class="prose"><p>Printing a 90 degree overhang normally means printing supports, then cutting them off and cleaning up the scar they leave behind. This project prints them with no support at all, on an unmodified 3-axis FDM printer with no hardware changes.</p><p>All of the work happens in software. The STL is pre warped, sliced with an ordinary planar slicer, and the resulting G-code is put through a back transformation in Python so the nozzle traces conical non planar layers that support themselves as they build. The result is 25% less material, 20% shorter build time, and no post processing at all.</p></div></div>
+  <div class="wrap">
+    
+    <div class="case-block"><figure class="cb-media" style="--ar:1.4011"><button class="media" data-full="../assets/support-free-printing/cad-model.jpg?v=77f1c5c4" aria-label="Enlarge image: The test part, a bent pipe with a true 90 degree overhang."><img src="../assets/support-free-printing/cad-model-thumb.jpg?v=548828e0" alt="The test part, a bent pipe with a true 90 degree overhang." loading="lazy" decoding="async"></button><figcaption>The test part, a bent pipe with a true 90 degree overhang.</figcaption></figure><div class="cb-text"><h3>The problem</h3><p>Printing a 90 degree overhang normally means printing supports, then cutting them off and cleaning up the scar they leave behind. This project prints them with no support at all, on an unmodified 3-axis FDM printer with no hardware changes.</p></div></div><div class="case-block flip"><figure class="cb-media" style="--ar:1.7778"><button class="media video" data-video="../assets/support-free-printing/nozzle-path.mp4?v=5d3bcc96" aria-label="Play video: The nozzle tracing a non planar path."><img src="../assets/support-free-printing/nozzle-path-poster.jpg?v=016cdade" alt="The nozzle tracing a non planar path." loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span></button><figcaption>The nozzle tracing a non planar path.</figcaption></figure><div class="cb-text"><h3>Non planar slicing</h3><p>All of the work happens in software. The STL is pre warped, sliced with an ordinary planar slicer, and the resulting G-code is put through a back transformation in Python so the nozzle traces conical non planar layers that support themselves as they build. The result is 25% less material, 20% shorter build time, and no post processing at all.</p></div></div>
+  </div>
 </section>
 
 <section>
   <div class="wrap">
     <h2>Gallery</h2>
-    <div class="grid"><figure class="tile" style="--ar:1.4011"><button class="media" data-full="../assets/support-free-printing/cad-model.jpg?v=77f1c5c4" aria-label="Enlarge image: The test part, a bent pipe with a true 90 degree overhang."><img src="../assets/support-free-printing/cad-model-thumb.jpg?v=548828e0" alt="The test part, a bent pipe with a true 90 degree overhang." loading="lazy" decoding="async"></button><figcaption>The test part, a bent pipe with a true 90 degree overhang.</figcaption></figure><figure class="tile" style="--ar:1.7699"><button class="media" data-full="../assets/support-free-printing/nozzle-angle.jpg?v=eb0b7c3b" aria-label="Enlarge image: Measuring the achieved cone angle mid print."><img src="../assets/support-free-printing/nozzle-angle-thumb.jpg?v=c8016bea" alt="Measuring the achieved cone angle mid print." loading="lazy" decoding="async"></button><figcaption>Measuring the achieved cone angle mid print.</figcaption></figure><figure class="tile" style="--ar:1.7778"><button class="media video" data-video="../assets/support-free-printing/nozzle-path.mp4?v=5d3bcc96" aria-label="Play video: The nozzle tracing a non planar path."><img src="../assets/support-free-printing/nozzle-path-poster.jpg?v=016cdade" alt="The nozzle tracing a non planar path." loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span></button><figcaption>The nozzle tracing a non planar path.</figcaption></figure></div>
+    <div class="grid"><figure class="tile" style="--ar:1.7699"><button class="media" data-full="../assets/support-free-printing/nozzle-angle.jpg?v=eb0b7c3b" aria-label="Enlarge image: Measuring the achieved cone angle mid print."><img src="../assets/support-free-printing/nozzle-angle-thumb.jpg?v=c8016bea" alt="Measuring the achieved cone angle mid print." loading="lazy" decoding="async"></button><figcaption>Measuring the achieved cone angle mid print.</figcaption></figure></div>
   </div>
 </section>
 
 <nav class="pager">
   <div class="wrap">
     <a class="pager-link" href="state-estimation.html">
-      <span class="dir">Previous</span><span class="name">State Estimation on Lie Groups</span></a>
+      <span class="dir">04 &middot; Previous</span><span class="name">State Estimation on Lie Groups</span></a>
     <a class="pager-link next" href="photoelasticity.html">
-      <span class="dir">Next</span><span class="name">Stress Concentration by Photoelasticity</span></a>
+      <span class="dir">06 &middot; Next</span><span class="name">Stress Concentration by Photoelasticity</span></a>
   </div>
 </nav>
 

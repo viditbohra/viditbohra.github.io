@@ -163,124 +163,222 @@ EXPERIENCE = [
 ]
 
 SKILLS = [
-    ("Design and simulation",
-     "SolidWorks, ANSYS, ANSYS Fluent, COMSOL, Fusion 360, MSC Adams, MATLAB, Simulink, Simscape Multibody"),
+    ("Mechanical design", "SolidWorks, Fusion 360, MSC Adams"),
+    ("Simulation & analysis", "ANSYS, ANSYS Fluent, COMSOL"),
     ("Robotics", "ROS2, Isaac Lab, Holosoma, Gazebo, MuJoCo"),
+    ("Control & estimation",
+     "MATLAB, Simulink, Simscape Multibody, Kalman/Mahony filtering, Lie groups"),
+    ("Fabrication", "3D printing (FDM), sheet metal"),
     ("Programming", "C, C++, Python, SQL, LaTeX"),
 ]
 
+# Each project's "sections" list is the case-study body: an optional lede
+# paragraph, then headed blocks that alternate image/text down the page, each
+# with at most one paired piece of media (kind, name, caption) or None for a
+# text-only block. "stats" are real numbers already established in the prose,
+# used as the page's big-number strip - never invented. "role" overrides the
+# annotation row's ROLE field with the matching title from EXPERIENCE, where
+# one exists; projects without a clean match just show their "org" there.
 PROJECTS = [
     {
         "slug": "retargeting",
         "title": "Human to Robot Motion Retargeting",
         "org": "GV Lab, University of Tokyo",
+        "role": "Research Intern",
         "when": "Jun 2026 to Jul 2026",
         "summary": "Turning a phone video of a person handling an object into motion a robot can reproduce.",
         "tags": ["HMR2 / 4D-Humans", "SMPL", "Holosoma", "Inverse kinematics", "Python"],
         "cover": ("video", "pepper-sim", "A Pepper humanoid reproducing a captured human motion in simulation"),
-        "body": [
-            "An end to end pipeline that takes an ordinary monocular RGB video of someone "
-            "handling an object and produces motion a robot can actually execute. Human pose "
-            "comes from HMR2 (4D-Humans), joint positions are extracted through SMPL, and the "
-            "motion is retargeted onto the robot using inverse kinematics in Holosoma. It runs "
-            "on both a Pepper humanoid and a UR5 arm.",
-            "The hard part is what gets preserved. Copying joint angles between bodies with "
-            "different proportions breaks the task, because the hand ends up in the wrong place "
-            "relative to the object. This pipeline uses an interaction mesh formulation that "
-            "encodes the spatial relationship between the human and the object, so the "
-            "retargeted motion keeps the manipulation intact rather than just the pose.",
+        "stats": [],
+        "sections": [
+            {
+                "heading": "Pipeline",
+                "media": ("video", "pepper-arms", "Retargeted arm motion on the Pepper humanoid."),
+                "body": [
+                    "An end to end pipeline that takes an ordinary monocular RGB video of someone "
+                    "handling an object and produces motion a robot can actually execute. Human pose "
+                    "comes from HMR2 (4D-Humans), joint positions are extracted through SMPL, and the "
+                    "motion is retargeted onto the robot using inverse kinematics in Holosoma. It runs "
+                    "on both a Pepper humanoid and a UR5 arm.",
+                ],
+            },
+            {
+                "heading": "Preserving the interaction",
+                "media": ("plot", "point-cloud", "Cleaned point cloud of the manipulated object, XZ and XY projections."),
+                "body": [
+                    "The hard part is what gets preserved. Copying joint angles between bodies with "
+                    "different proportions breaks the task, because the hand ends up in the wrong place "
+                    "relative to the object. This pipeline uses an interaction mesh formulation that "
+                    "encodes the spatial relationship between the human and the object, so the "
+                    "retargeted motion keeps the manipulation intact rather than just the pose.",
+                ],
+            },
         ],
         "gallery": [
-            ("video", "pepper-arms", "Retargeted arm motion on the Pepper humanoid."),
             ("video", "ur5-arm", "The same pipeline driving a UR5 arm."),
             ("video", "humanoid-sim", "A full humanoid reproducing the captured motion."),
             ("video", "smpl-body", "The SMPL body model recovered from the human motion."),
-            ("plot", "point-cloud", "Cleaned point cloud of the object, XZ and XY projections."),
         ],
     },
     {
         "slug": "mars-rover-arm",
         "title": "Mars Rover Robotic Arm",
         "org": "Mars Rover Team, IIT Bombay",
+        "role": "Senior Design Engineer, Robotic Arm Subsystem",
         "when": "Oct 2024 to present",
-        "summary": "A 5-DOF manipulator for a competition rover, built around a custom cycloidal drive.",
+        "summary": "A 5-DOF manipulator for a competition rover, built around two purpose built cycloidal gearboxes.",
         "tags": ["SolidWorks", "Cycloidal drive", "ANSYS", "3D printing", "MSC Adams"],
         "cover": ("image", "rover-field", "The completed rover with its robotic arm deployed on a competition course"),
-        "body": [
+        "stats": [
+            ("81:1", "Shoulder gearbox ratio"),
+            ("160 Nm", "Shoulder gearbox torque"),
+            ("5 kg", "Payload at full extension"),
+            ("35%", "Lighter redesigned wrist"),
+        ],
+        "lede": [
             "The manipulator on a semi autonomous rover built by a 30 person team to cross rough "
             "terrain and perform dexterous tasks at international competitions. I designed the "
-            "5-DOF arm and reworked most of its drivetrain: a custom two stage 81:1 cycloidal "
-            "drive, a 2-DOF differential wrist redesigned as a 3D print that came out 35% "
-            "lighter, and the linear base, links and gripper below. Each joint also uses "
-            "explicit steering, so a commanded angle maps to one actuator rather than being "
-            "shared across a coupled linkage, which keeps the control predictable.",
-            {"h": "Linear base"},
-            "The carriage rides on two rails, and no assembly is ever perfectly parallel: "
-            "manufacturing and build tolerance can leave the rails converging in a slight V, or "
-            "sitting high on one side and low on the other. Fixing the carriage rigidly to both "
-            "would fight that misalignment and bind. Instead the mounting holes on one side are "
-            "cut as slots, so the carriage can shift sideways to whatever the rails actually are "
-            "rather than what they were drawn as, and the binding goes away.",
-            "The carriage is driven by a single long lead screw, and a screw that long does not "
-            "stay perfectly true to the rails over its length. The plate that bolts the nut to "
-            "the carriage carries a vertical slot for the same reason: it lets the nut float up "
-            "and down instead of being pinned rigidly to the carriage, so the nut only ever "
-            "pushes the carriage horizontally, the direction it is actually meant to drive in, "
-            "and never picks up a vertical load it was never meant to carry.",
-            {"h": "Wrist"},
-            "The wrist gets its 2 DOF from a differential: two motors mounted back at the base "
-            "drive into a bevel gear differential, so driving both in the same direction "
-            "produces one motion and driving them opposite produces the other, with anything in "
-            "between blending the two. That keeps both actuators off the moving end of the arm, "
-            "where their mass would cost the most.",
-            "One of those two drives runs through a worm stage, added for two reasons: a worm "
-            "gets a large reduction in a single small stage, and a worm cannot be back driven, "
-            "so that axis holds its position under load and stays where it is if power is lost, "
-            "instead of collapsing under the weight of the arm.",
-            "The output shaft originally hung as an unsupported cantilever off the gearbox. That "
-            "was wrong twice over: the whole bending load went through the gear mesh with "
-            "nothing else carrying it, and the print's layers took that load perpendicular to "
-            "themselves, the weakest direction an FDM part has. Supporting the shaft back to the "
-            "base fixed both problems at once, giving the load a path into the base instead of "
-            "overhanging the gearbox, and loading the print along its layers instead of trying "
-            "to peel them apart.",
-            {"h": "Gearbox"},
-            "The two stage 81:1 cycloidal drive at the shoulder needed its own balancing fix. A "
-            "single cycloidal disc spins with its mass offset from the output axis, and normal "
-            "practice pairs it with a second disc at the opposite eccentricity so the two cancel "
-            "each other's out of balance force. Done the straightforward way, two stages means "
-            "four discs. Working from a published two stage cycloidal design, I built this "
-            "gearbox out of two discs total, getting both reduction stages without doubling the "
-            "disc count or the length of the housing.",
-            "It has not been a clean win. Trading four discs for two gives up some of that "
-            "balance, and the drive stutters under load, a limitation that comes from the "
-            "geometry itself rather than from how it was built. I reached out to the paper's "
-            "authors to ask about it and never heard back, so this is an open problem I am still "
-            "working through, not a solved one.",
-            {"h": "Links"},
-            "The arm's links are cut from sheet metal, with the edges hemmed, folded back on "
-            "themselves, rather than left flat. Hemming raises the section's area moment of "
-            "inertia without adding thickness or bolting on a separate stiffening flange, so a "
-            "link cut from thin sheet gets meaningfully stiffer in bending for the same weight.",
-            {"h": "Gripper"},
-            "The gripper sits on the linear base at the working end of the arm, with its jaw "
-            "travel lined up to the competition's sample handling tasks rather than a generic "
-            "centred pinch grip.",
-            {"h": "Results"},
-            "With this rover the team placed 2nd at the European Rover Challenge against 24 "
-            "teams from 15 countries, took 1st in the Astrobiology Mission at the International "
-            "Rover Challenge, and finished 9th overall in the IRC against more than 35 "
-            "institutions worldwide.",
+            "5-DOF arm and reworked most of its drivetrain: two purpose built cycloidal "
+            "gearboxes, a 2-DOF differential wrist redesigned as a 3D print that came out 35% "
+            "lighter, and the linear base, links and gripper below. Rated to carry 5 kg at full "
+            "extension, each joint uses explicit steering, so a commanded angle maps to one "
+            "actuator rather than being shared across a coupled linkage, which keeps the control "
+            "predictable.",
+        ],
+        "sections": [
+            {
+                "heading": "Linear base",
+                "media": [
+                    ("image", "base-slots-detail", "The carriage's elongated mounting slots, which absorb rail misalignment instead of fighting it."),
+                    ("video", "linear-base-cad", "Linear base motion study."),
+                    ("video", "linear-base-demo", "The linear base running on hardware."),
+                ],
+                "body": [
+                    "The carriage rides on twin MGN9H linear rails, and no assembly is ever "
+                    "perfectly parallel: manufacturing and build tolerance can leave the rails "
+                    "converging in a slight V, or sitting high on one side and low on the other. "
+                    "Fixing the carriage rigidly to both would fight that misalignment and bind. "
+                    "Instead the rail mounting holes are cut as elongated slots, giving about 7 to "
+                    "8 mm of adjustment, so the carriage can shift sideways to whatever the rails "
+                    "actually are rather than what they were drawn as.",
+                    "The carriage is driven by a trapezoidal lead screw rather than a ball screw, "
+                    "chosen for its tolerance to dust and grit and because it self locks when "
+                    "unpowered. A pulley and belt drive was considered for the same job, since it "
+                    "would keep the motor's weight off the moving carriage, but it was dropped: "
+                    "the belt widened the mounting plate and enough of its length elongates "
+                    "plastically over time that positioning would have drifted. The plate that "
+                    "bolts the lead screw nut to the carriage carries its own vertical slot for "
+                    "the same underlying reason as the rails: it lets the nut float instead of "
+                    "being pinned rigidly, so it only ever pushes the carriage horizontally, the "
+                    "direction it is actually meant to drive in, and never picks up a vertical "
+                    "load it was never meant to carry.",
+                ],
+            },
+            {
+                "heading": "Wrist",
+                "media": [
+                    ("image", "wrist-shaft-support-cad", "The differential's worm shafts, supported by bearings at both ends rather than hanging off the gearbox."),
+                    ("video", "wrist-cad", "The 2-DOF differential wrist in CAD."),
+                ],
+                "body": [
+                    "The wrist gets its 2 DOF from a differential: two stepper motors mounted back "
+                    "at the base drive into a bevel gear differential, so driving both in the same "
+                    "direction produces one motion and driving them opposite produces the other, "
+                    "with anything in between blending the two. That keeps both actuators off the "
+                    "moving end of the arm, where their mass would cost the most. It is fully 3D "
+                    "printed, which let the housing take on a geometry a machined part could not "
+                    "have and cut iteration time considerably.",
+                    "Each drive runs through a worm stage before it reaches the differential's "
+                    "bevel gears, added for two reasons: a worm gets a large reduction in a single "
+                    "small stage, and a worm cannot be back driven, so the wrist holds its "
+                    "position under load and stays where it is if power is lost, instead of "
+                    "collapsing under the weight of the arm.",
+                    "The worm shaft originally hung as an unsupported cantilever off the gearbox. "
+                    "That was wrong twice over: the whole bending load went through the gear mesh "
+                    "with nothing else carrying it, and under vibration the meshing would work "
+                    "loose. Constraining the shaft rigidly with bearings at both ends fixed that, "
+                    "giving the load a path into the housing instead of overhanging the gearbox. "
+                    "With no way to simulate a 3D printed part's behaviour beforehand, the fix "
+                    "came from iterative prototyping and load testing on hardware rather than FEA.",
+                ],
+            },
+            {
+                "heading": "Gearbox",
+                "media": [
+                    ("plot", "gearbox-disc-fea", "Stress analysis on a cycloidal disc, the epitrochoid profile at the centre of both gearboxes."),
+                    ("image", "gearbox-cross-section", "A section through the gearbox coupler, showing the bearing and seal stack that keeps the discs running true."),
+                ],
+                "body": [
+                    "The shoulder and elbow each get their own cycloidal gearbox rather than "
+                    "sharing one: a two stage drive at the shoulder, 81:1, rated to 160 Nm and "
+                    "held by a fail safe electromagnetic brake that engages the moment power is "
+                    "cut; a lighter single stage drive at the elbow, 34:1 and 65 Nm, deliberately "
+                    "smaller so it does not add dead weight the shoulder has to carry.",
+                    "A cycloidal disc spins with its mass offset from the output axis, and the "
+                    "standard fix for the out of balance force that creates is a second disc at "
+                    "the opposite eccentricity. Working from a published two stage cycloidal "
+                    "design, the shoulder gearbox gets both reduction stages out of two discs "
+                    "rather than the four a conventional layout would need, keeping it far more "
+                    "compact. FEA on the internals under a 5 kg payload at full extension gives "
+                    "safety factors of 4 on the output plate and 6 and 4 on the two discs, "
+                    "margins comfortable enough to build with confidence.",
+                    "It has not been a clean win. Trading four discs for two gives up some of the "
+                    "balance that pairing normally provides, and the drive stutters under load, a "
+                    "limitation that comes from the geometry itself rather than from how it was "
+                    "built. The roller rods inside the gearbox came out as its weakest point in "
+                    "the same analysis, which lines up with where the stutter shows up. I reached "
+                    "out to the paper's authors to ask about it and never heard back, so this is "
+                    "an open problem I am still working through, not a solved one.",
+                ],
+            },
+            {
+                "heading": "Links",
+                "media": ("image", "link-hemmed-edge", "The shoulder link: laser cut aluminium sheet with a hemmed edge, doubled up with U shaped brackets."),
+                "body": [
+                    "The shoulder link is laser cut aluminium sheet, not the carbon fibre used the "
+                    "year before, chosen for a better balance of cost and stiffness. Its long "
+                    "edges are hemmed, folded back on themselves, which raises the section's area "
+                    "moment of inertia without adding thickness or bolting on a separate flange, "
+                    "so a link cut from thin sheet gets meaningfully stiffer in bending for the "
+                    "same weight. Two hemmed sheets are then joined with U shaped brackets across "
+                    "the span for extra rigidity. The elbow link is a simpler 38 mm square "
+                    "aluminium tube, sized to make mounting the electronics and the wrist "
+                    "straightforward.",
+                ],
+            },
+            {
+                "heading": "Gripper",
+                "media": ("image", "gripper-cad", "The gripper: a fixed, rubber padded finger and a lead screw driven jaw."),
+                "body": [
+                    "A low speed, high torque N20 motor drives a lead screw against a fixed, "
+                    "rubber padded finger for a strong, controlled grip, with the jaw travel "
+                    "lined up to the competition's sample handling tasks rather than a generic "
+                    "centred pinch. It is wireless: an onboard ESP32 replaced a slip ring at the "
+                    "wrist that had proven fragile and difficult to maintain, so the gripper now "
+                    "carries its own control and video link instead of routing everything through "
+                    "a rotating contact.",
+                ],
+            },
+            {
+                "heading": "Results",
+                "media": None,
+                "body": [
+                    "With this rover the team placed 2nd at the European Rover Challenge against "
+                    "24 teams from 15 countries, took 1st in the Astrobiology Mission at the "
+                    "International Rover Challenge, and finished 9th overall in the IRC against "
+                    "more than 35 institutions worldwide.",
+                ],
+            },
         ],
         "gallery": [
             ("image", "arm-cad", "The full 5-DOF arm in CAD, with the linear base, worm driven wrist and gripper."),
-            ("image", "cycloidal-drive", "The two stage cycloidal drive, both stages built from two discs instead of four."),
+            ("image", "rover-cad", "Full rover chassis in CAD."),
+            ("image", "wrist-differential-cad", "The wrist differential in CAD, worm stage and bevel gears visible."),
             ("image", "wrist-assembly", "The bevel gear differential at the centre of the 2-DOF wrist, assembled."),
             ("image", "wrist-build", "The wrist with its worm stage, lead screw and gripper drive."),
-            ("image", "rover-cad", "Full rover chassis in CAD."),
-            ("video", "wrist-cad", "The 2-DOF differential wrist in CAD."),
-            ("video", "linear-base-cad", "Linear base motion study."),
-            ("video", "linear-base-demo", "The linear base running on hardware."),
+            ("image", "cycloidal-drive", "The shoulder gearbox, assembled."),
+            ("image", "elbow-gearbox-cad", "The elbow's single stage cycloidal gearbox, deliberately smaller than the shoulder's."),
+            ("plot", "gearbox-plate-fea", "FEA on the shoulder's output plate: safety factor of 4 under a 160 Nm moment."),
         ],
     },
     {
@@ -291,49 +389,79 @@ PROJECTS = [
         "summary": "A 6-DOF walking robot with a reinforcement learning policy trained in Isaac Lab.",
         "tags": ["Isaac Lab", "PPO", "Simulink", "LQR", "Arduino", "FDM printing"],
         "cover": ("image", "hardware", "The assembled bipedal robot in red printed parts, standing on a bench"),
-        "body": [
+        "stats": [
+            ("6-DOF", "Biped"),
+            ("85%", "Simscape model fit"),
+            ("4-DOF", "Standalone test rig"),
+        ],
+        "lede": [
             "A 6-DOF biped built from scratch after a literature review of existing walking "
-            "robots set the baseline requirements. The frame uses lightweight carbon fibre tubes "
-            "for the leg links, joined at each servo with 3D printed brackets, and limit sensors "
-            "at every joint for homing.",
-            {"h": "Weight shift mechanism"},
-            "Standing on two feet means shifting the centre of mass over whichever leg is about "
-            "to bear it, and a rack and pinion assembly at the hip does that shifting "
-            "predictably instead of leaving it to the legs alone. The battery mounts directly on "
-            "the moving carriage of that mechanism rather than on the fixed torso, so its mass "
-            "becomes the shifting counterweight instead of dead weight the frame just has to "
-            "carry. That gives the mechanism more authority for the same travel and takes the "
-            "heaviest single component off the torso's own weight budget.",
-            {"h": "Wiring"},
-            "The carriage travels back and forth on every step, and running wiring straight "
-            "across that motion would fatigue and tangle it over time. A drag chain carries the "
-            "cabling across the travel instead, so the wiring bends the same way on every cycle "
-            "rather than wherever it happens to fall.",
-            {"h": "Test rig"},
-            "Before committing to the full assembly, both legs were built and driven on a "
-            "standalone 4-DOF test rig off the torso, to validate the leg design and tune "
-            "control on hardware without risking the complete robot.",
-            {"h": "Underactuated ankle joints"},
-            "Not every DOF is actuated. Two joints in the ankle are left passive and returned by "
-            "springs instead of motors, which keeps the weight and part count down while still "
-            "giving the robot the compliance it needs to turn, since a fully rigid foot cannot "
-            "pivot against the ground.",
-            {"h": "Control"},
-            "Three approaches were tried. A PPO policy trained in Isaac Lab, with a multi term "
-            "reward covering velocity tracking, feet air time and joint limit penalties, "
-            "produced a stable walking gait in simulation. A state space model fitted from "
-            "Simscape at 85% fit drove a data driven controller in Simulink. And an LQR "
-            "controller on a linear inverted pendulum model produced a stable gait analytically. "
-            "On hardware, inverse kinematics and PID loops on an Arduino Mega with an MPU6050 "
-            "handle real time balance.",
+            "robots set the baseline requirements. The frame uses lightweight carbon fibre "
+            "tubes for the leg links, joined at each servo with 3D printed brackets, and limit "
+            "sensors at every joint for homing.",
+        ],
+        "sections": [
+            {
+                "heading": "Weight shift mechanism",
+                "media": ("image", "cad-render", "The biped in CAD, trussed throughout to cut mass, with the rack and pinion weight shift mechanism at the hip."),
+                "body": [
+                    "Standing on two feet means shifting the centre of mass over whichever leg is "
+                    "about to bear it, and a rack and pinion assembly at the hip does that "
+                    "shifting predictably instead of leaving it to the legs alone. The battery "
+                    "mounts directly on the moving carriage of that mechanism rather than on the "
+                    "fixed torso, so its mass becomes the shifting counterweight instead of dead "
+                    "weight the frame just has to carry. That gives the mechanism more authority "
+                    "for the same travel and takes the heaviest single component off the torso's "
+                    "own weight budget.",
+                ],
+            },
+            {
+                "heading": "Wiring",
+                "media": None,
+                "body": [
+                    "The carriage travels back and forth on every step, and running wiring "
+                    "straight across that motion would fatigue and tangle it over time. A drag "
+                    "chain carries the cabling across the travel instead, so the wiring bends the "
+                    "same way on every cycle rather than wherever it happens to fall.",
+                ],
+            },
+            {
+                "heading": "Test rig",
+                "media": ("image", "leg-test-rig", "The legs on the standalone 4-DOF test rig, hip rack and pinion and carbon fibre tubes visible."),
+                "body": [
+                    "Before committing to the full assembly, both legs were built and driven on a "
+                    "standalone 4-DOF test rig off the torso, to validate the leg design and tune "
+                    "control on hardware without risking the complete robot.",
+                ],
+            },
+            {
+                "heading": "Underactuated ankle joints",
+                "media": None,
+                "body": [
+                    "Not every DOF is actuated. Two joints in the ankle are left passive and "
+                    "returned by springs instead of motors, which keeps the weight and part count "
+                    "down while still giving the robot the compliance it needs to turn, since a "
+                    "fully rigid foot cannot pivot against the ground.",
+                ],
+            },
+            {
+                "heading": "Control",
+                "media": ("plot", "simscape-model", "The Simscape multibody model, fitted to 85% and used to drive the data driven controller."),
+                "body": [
+                    "Three approaches were tried. A PPO policy trained in Isaac Lab, with a multi "
+                    "term reward covering velocity tracking, feet air time and joint limit "
+                    "penalties, produced a stable walking gait in simulation. A state space model "
+                    "fitted from Simscape at 85% fit drove a data driven controller in Simulink. "
+                    "And an LQR controller on a linear inverted pendulum model produced a stable "
+                    "gait analytically. On hardware, inverse kinematics and PID loops on an "
+                    "Arduino Mega with an MPU6050 handle real time balance.",
+                ],
+            },
         ],
         "gallery": [
-            ("image", "cad-render", "The biped in CAD, trussed throughout to cut mass, with the rack and pinion weight shift mechanism at the hip."),
-            ("image", "leg-test-rig", "The legs on the standalone 4-DOF test rig, hip rack and pinion and carbon fibre tubes visible."),
             ("video", "rl-policy", "The trained PPO policy walking in Isaac Lab."),
             ("video", "data-driven-control", "The data driven controller running in simulation."),
             ("video", "hardware-test", "Hardware test."),
-            ("plot", "simscape-model", "The Simscape multibody model."),
         ],
     },
     {
@@ -344,20 +472,32 @@ PROJECTS = [
         "summary": "Attitude estimation on Lie groups, extended into visual inertial odometry on a rig I built.",
         "tags": ["Lie groups", "Kalman", "Mahony", "Allan deviation", "RP2040", "Python"],
         "cover": ("image", "camera-imu-rig", "A hand holding the custom camera and IMU rig built on a printed plate"),
-        "body": [
-            "This started as coursework in estimation on Lie groups: implementing the Kalman "
-            "filter, TRIAD and QUEST on an IMU to get a stable attitude estimate by fusing "
-            "gyroscope, accelerometer and magnetometer data. I then implemented the Mahony "
-            "filter and compared it systematically against TRIAD and QUEST, which gave a 40% "
-            "lower standard deviation in the output.",
-            "It has since grown into a visual inertial setup on hardware I built, an RP2040 Pico "
-            "with an IMX335 camera and an MPU6050, characterised with an Allan deviation "
-            "analysis to pin down the gyro and accelerometer noise parameters. The filter "
-            "estimates the camera trajectory and a landmark map together from the fused visual "
-            "and inertial stream.",
+        "stats": [("40%", "Lower deviation vs. TRIAD/QUEST")],
+        "sections": [
+            {
+                "heading": "Attitude estimation",
+                "media": None,
+                "body": [
+                    "This started as coursework in estimation on Lie groups: implementing the "
+                    "Kalman filter, TRIAD and QUEST on an IMU to get a stable attitude estimate "
+                    "by fusing gyroscope, accelerometer and magnetometer data. I then implemented "
+                    "the Mahony filter and compared it systematically against TRIAD and QUEST, "
+                    "which gave a 40% lower standard deviation in the output.",
+                ],
+            },
+            {
+                "heading": "Visual inertial hardware",
+                "media": ("image", "rig-detail", "The rig set up for a capture run."),
+                "body": [
+                    "It has since grown into a visual inertial setup on hardware I built, an "
+                    "RP2040 Pico with an IMX335 camera and an MPU6050, characterised with an "
+                    "Allan deviation analysis to pin down the gyro and accelerometer noise "
+                    "parameters. The filter estimates the camera trajectory and a landmark map "
+                    "together from the fused visual and inertial stream.",
+                ],
+            },
         ],
         "gallery": [
-            ("image", "rig-detail", "The rig set up for a capture run."),
             ("video", "vio-run", "A live run with tracked features and the state estimate overlaid."),
             ("plot", "trajectory", "Estimated path coloured by time, with the recovered landmarks."),
             ("plot", "landmark-map", "The resulting 3D landmark map."),
@@ -372,20 +512,32 @@ PROJECTS = [
         "summary": "Printing 90 degree overhangs with no support material, on an unmodified 3-axis printer.",
         "tags": ["Python", "G-code", "Non planar slicing", "FDM", "SolidWorks"],
         "cover": ("image", "printed-part", "A black 3D printed pipe with a 90 degree overhang, printed without supports"),
-        "body": [
-            "Printing a 90 degree overhang normally means printing supports, then cutting them "
-            "off and cleaning up the scar they leave behind. This project prints them with no "
-            "support at all, on an unmodified 3-axis FDM printer with no hardware changes.",
-            "All of the work happens in software. The STL is pre warped, sliced with an ordinary "
-            "planar slicer, and the resulting G-code is put through a back transformation in "
-            "Python so the nozzle traces conical non planar layers that support themselves as "
-            "they build. The result is 25% less material, 20% shorter build time, and no post "
-            "processing at all.",
+        "stats": [("25%", "Less material"), ("20%", "Shorter build time")],
+        "sections": [
+            {
+                "heading": "The problem",
+                "media": ("image", "cad-model", "The test part, a bent pipe with a true 90 degree overhang."),
+                "body": [
+                    "Printing a 90 degree overhang normally means printing supports, then cutting "
+                    "them off and cleaning up the scar they leave behind. This project prints "
+                    "them with no support at all, on an unmodified 3-axis FDM printer with no "
+                    "hardware changes.",
+                ],
+            },
+            {
+                "heading": "Non planar slicing",
+                "media": ("video", "nozzle-path", "The nozzle tracing a non planar path."),
+                "body": [
+                    "All of the work happens in software. The STL is pre warped, sliced with an "
+                    "ordinary planar slicer, and the resulting G-code is put through a back "
+                    "transformation in Python so the nozzle traces conical non planar layers that "
+                    "support themselves as they build. The result is 25% less material, 20% "
+                    "shorter build time, and no post processing at all.",
+                ],
+            },
         ],
         "gallery": [
-            ("image", "cad-model", "The test part, a bent pipe with a true 90 degree overhang."),
             ("image", "nozzle-angle", "Measuring the achieved cone angle mid print."),
-            ("video", "nozzle-path", "The nozzle tracing a non planar path."),
         ],
     },
     {
@@ -396,22 +548,37 @@ PROJECTS = [
         "summary": "Measuring stress concentration factors optically, with fringe patterns instead of a solver.",
         "tags": ["Photoelasticity", "ANSYS FEA", "Experimental mechanics", "TPU moulding"],
         "cover": ("image", "square-hole", "Coloured isochromatic fringe pattern around a square hole in a loaded specimen"),
-        "body": [
-            "Measuring stress concentration factors optically rather than numerically. Epoxy "
-            "specimens were cast in TPU moulds with three hole geometries, square, filleted "
-            "square and elliptical, then loaded in a polariscope where the isochromatic fringe "
-            "pattern makes the stress field directly visible. Counting fringe order around the "
-            "hole gives the stress concentration factor.",
-            "The measured values were validated against ANSYS FEA and agreed closely on where "
-            "the concentrations appear. Filleting the sharp corners of the square hole cut the "
-            "factor by 21%, and switching to an elliptical hole reduced it a further 33%.",
+        "stats": [
+            ("21%", "SCF reduction, filleted hole"),
+            ("33%", "SCF reduction, elliptical hole"),
+        ],
+        "sections": [
+            {
+                "heading": "Measuring stress concentration",
+                "media": ("image", "square-hole-wide", "The full polariscope view, grips and frame included."),
+                "body": [
+                    "Measuring stress concentration factors optically rather than numerically. "
+                    "Epoxy specimens were cast in TPU moulds with three hole geometries, square, "
+                    "filleted square and elliptical, then loaded in a polariscope where the "
+                    "isochromatic fringe pattern makes the stress field directly visible. "
+                    "Counting fringe order around the hole gives the stress concentration factor.",
+                ],
+            },
+            {
+                "heading": "Results",
+                "media": ("image", "filleted-hole", "Filleted corners, giving a 21% lower stress concentration factor."),
+                "body": [
+                    "The measured values were validated against ANSYS FEA and agreed closely on "
+                    "where the concentrations appear. Filleting the sharp corners of the square "
+                    "hole cut the factor by 21%, and switching to an elliptical hole reduced it a "
+                    "further 33%.",
+                ],
+            },
         ],
         "gallery": [
-            ("image", "filleted-hole", "Filleted corners, giving a 21% lower stress concentration factor."),
             ("image", "elliptical-hole", "An elliptical hole, a further 33% reduction."),
             ("image", "square-hole-detail", "Counting fringe order around the square hole."),
             ("image", "elliptical-hole-detail", "The elliptical specimen in the loading frame."),
-            ("image", "square-hole-wide", "The full polariscope view, grips and frame included."),
         ],
     },
 ]
@@ -494,6 +661,9 @@ def shell(title, description, body, depth=0, extra_head=""):
 <meta property="og:title" content="{e(title)}">
 <meta property="og:description" content="{e(description)}">
 <meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{asset(up, "style.css")}">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9881;</text></svg>">
 {extra_head}</head>
@@ -587,15 +757,58 @@ def coursework(groups):
     return '<div class="courses">' + "".join(cols) + "</div>"
 
 
+FEATURED = {"mars-rover-arm", "bipedal-robot"}
+HERO_IMAGE = ("me", "portrait")
+
+
+def project_role(p):
+    """The annotation row's ROLE value: an explicit override where the project
+    sets one, else a matching EXPERIENCE title (ties the project to what was
+    actually done rather than just naming the org), else the org itself."""
+    if p.get("role"):
+        return p["role"]
+    for x in EXPERIENCE:
+        if p["org"].split(",")[0] in x["org"]:
+            return x["title"]
+    return p["org"]
+
+
 def build_index():
+    featured, more = [], []
+    for i, p in enumerate(PROJECTS):
+        (featured if p["slug"] in FEATURED else more).append((i, p))
+
+    feature_blocks = []
+    for i, p in featured:
+        kind, name, alt = p["cover"]
+        img = asset("", f'assets/{p["slug"]}/{name}'
+                    + ("-poster.jpg" if kind == "video" else "-thumb.jpg"))
+        stats = "".join(
+            f'<div class="stat"><div class="n mono">{e(v)}</div><div class="l">{e(l)}</div></div>'
+            for v, l in p["stats"][:3]
+        )
+        feature_blocks.append(
+            f'<a class="feature" href="projects/{p["slug"]}.html">'
+            f'<div class="feature-media" style="--ar:{ratio(p["slug"], name)}">'
+            f'<img src="{img}" alt="{e(alt)}" loading="lazy" decoding="async"></div>'
+            f'<div class="feature-text">'
+            f'<div class="feature-num mono">{i + 1:02d}</div>'
+            f'<h3>{e(p["title"])}</h3>'
+            f'<p class="feature-sum">{e(p["summary"])}</p>'
+            f'{f"<div class=\"stats\">{stats}</div>" if stats else ""}'
+            f'<div class="feature-cta">Read the case study</div>'
+            f"</div></a>"
+        )
+
     cards = []
-    for p in PROJECTS:
+    for i, p in more:
         kind, name, alt = p["cover"]
         img = asset("", f'assets/{p["slug"]}/{name}'
                     + ("-poster.jpg" if kind == "video" else "-thumb.jpg"))
         tags = "".join(f"<li>{e(t)}</li>" for t in p["tags"][:3])
         cards.append(
             f'<a class="card" href="projects/{p["slug"]}.html">'
+            f'<div class="card-num mono">{i + 1:02d}</div>'
             f'<div class="card-img"><img src="{img}" alt="{e(alt)}" loading="lazy" decoding="async"></div>'
             f'<div class="card-body">'
             f'<h3>{e(p["title"])}</h3>'
@@ -605,16 +818,18 @@ def build_index():
         )
 
     skills = "".join(f'<div class="skill"><dt>{e(k)}</dt><dd>{e(v)}</dd></div>' for k, v in SKILLS)
-    tagline = "".join(f"<p>{e(t)}</p>" for t in TAGLINE)
+
+    hero_slug, hero_name = HERO_IMAGE
+    hero_img = asset("", f"assets/{hero_slug}/{hero_name}-thumb.jpg")
 
     body = f"""
-<header class="intro">
-  <div class="wrap intro-inner">
-    <img class="avatar" src="{asset("", "assets/me/portrait-thumb.jpg")}" alt="Vidit Bohra" decoding="async">
-    <div class="intro-text">
-      <h1>Vidit Bohra</h1>
-      <p class="role">Third year Mechanical Engineering undergraduate, IIT Bombay</p>
-      {tagline}
+<header class="hero">
+  <div class="wrap hero-inner">
+    <div class="hero-text">
+      <p class="hero-eyebrow">Third year Mechanical Engineering undergraduate, IIT Bombay</p>
+      <h1>Mechanical engineering, robotics &amp; intelligent machines.</h1>
+      <p class="hero-lede">{e(TAGLINE[1])}</p>
+      <p class="hero-lede">{e(TAGLINE[0])}</p>
       <div class="btns">
         <a class="btn primary" href="#projects">See my work</a>
         <a class="btn" href="resume.pdf">Resume</a>
@@ -622,20 +837,25 @@ def build_index():
         <a class="btn" href="{GITHUB}">GitHub</a>
       </div>
     </div>
+    <figure class="hero-media" style="--ar:{ratio(hero_slug, hero_name)}">
+      <img src="{hero_img}" alt="Vidit Bohra" decoding="async">
+    </figure>
   </div>
 </header>
 
 <main>
 
-<section id="education">
-  <div class="wrap"><h2>Education</h2>{listing(EDUCATION)}</div>
+<section id="projects">
+  <div class="wrap">
+    <h2>Featured work</h2>
+    {"".join(feature_blocks)}
+  </div>
 </section>
 
-<section id="coursework">
+<section id="more-projects">
   <div class="wrap">
-    <h2>Coursework</h2>
-    <p class="section-note">Courses marked <span class="now">now</span> are running this semester.</p>
-    {coursework(COURSEWORK)}
+    <h2>More projects</h2>
+    <div class="cards">{"".join(cards)}</div>
   </div>
 </section>
 
@@ -643,14 +863,19 @@ def build_index():
   <div class="wrap"><h2>Experience</h2>{listing(EXPERIENCE)}</div>
 </section>
 
+<section id="education">
+  <div class="wrap"><h2>Education</h2>{listing(EDUCATION)}</div>
+</section>
+
 <section id="skills">
   <div class="wrap"><h2>Skills</h2><dl class="skills">{skills}</dl></div>
 </section>
 
-<section id="projects">
+<section id="coursework">
   <div class="wrap">
-    <h2>Projects</h2>
-    <div class="cards">{"".join(cards)}</div>
+    <h2>Coursework</h2>
+    <p class="section-note">Courses marked <span class="now">now</span> are running this semester.</p>
+    {coursework(COURSEWORK)}
   </div>
 </section>
 
@@ -668,17 +893,62 @@ def build_index():
     )
 
 
+def case_block(slug, section, up, flip):
+    """One row in a project's case study.
+
+    A section's "media" is None (text only, full width - a result, a
+    limitation, anything without its own natural picture), a single (kind,
+    name, caption) tuple (the standard alternating image/text pair), or a
+    list of tuples (more than one piece of media for the same point, e.g. a
+    render plus the video that shows it running) - which renders full width
+    with the media laid out as a horizontal strip below the text, rather
+    than squeezing several items into one narrow column.
+
+    Which side a single image falls on is passed in explicitly as `flip`
+    rather than picked out with an nth-of-type CSS selector: nth-of-type
+    counts by tag name among all sibling divs, including the lede paragraph
+    before the first block, so it silently miscounts and the alternation
+    comes out wrong from the very first section.
+    """
+    paras = "".join(f"<p>{e(t)}</p>" for t in section["body"])
+    text = f'<div class="cb-text"><h3>{e(section["heading"])}</h3>{paras}</div>'
+    media = section["media"]
+
+    if media is None:
+        return f'<div class="case-block text-only">{text}</div>'
+
+    if isinstance(media, list):
+        tiles = "".join(tile(k, slug, n, c, up) for k, n, c in media)
+        return f'<div class="case-block horizontal">{text}<div class="grid cb-strip">{tiles}</div></div>'
+
+    kind, name, caption = media
+    fig = (f'<figure class="cb-media" style="--ar:{ratio(slug, name)}">'
+           f'{media_button(kind, slug, name, caption, up)}'
+           f"<figcaption>{e(caption)}</figcaption></figure>")
+    cls = "case-block flip" if flip else "case-block"
+    return f'<div class="{cls}">{fig}{text}</div>'
+
+
 def build_project(index):
     p = PROJECTS[index]
     up = "../"
     kind, name, alt = p["cover"]
 
     tags = "".join(f"<li>{e(t)}</li>" for t in p["tags"])
-    paras = "".join(
-        f'<h3>{e(t["h"])}</h3>' if isinstance(t, dict) else f"<p>{e(t)}</p>"
-        for t in p["body"]
-    )
+    lede = "".join(f'<p>{e(t)}</p>' for t in p.get("lede", []))
+    media_row = 0
+    blocks = []
+    for s in p["sections"]:
+        if s["media"] is not None and not isinstance(s["media"], list):
+            media_row += 1
+        blocks.append(case_block(p["slug"], s, up, flip=media_row % 2 == 0))
+    blocks = "".join(blocks)
     tiles = "".join(tile(k, p["slug"], n, c, up) for k, n, c in p["gallery"])
+
+    stats = "".join(
+        f'<div class="stat"><div class="n mono">{e(v)}</div><div class="l">{e(l)}</div></div>'
+        for v, l in p["stats"]
+    )
 
     model_section = ""
     extra_head = ""
@@ -696,18 +966,24 @@ def build_project(index):
         extra_head = ('<script type="module" src="https://cdn.jsdelivr.net/npm/'
                       '@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>\n')
 
-    prev_p = PROJECTS[index - 1]
-    next_p = PROJECTS[(index + 1) % len(PROJECTS)]
+    n = len(PROJECTS)
+    prev_p, prev_num = PROJECTS[index - 1], (index - 1) % n + 1
+    next_p, next_num = PROJECTS[(index + 1) % n], (index + 1) % n + 1
 
     body = f"""
 <main class="project-page">
 
 <header class="project-head">
   <div class="wrap">
+    <p class="project-num mono">{index + 1:02d} / {len(PROJECTS):02d}</p>
     <h1>{e(p["title"])}</h1>
-    <p class="role">{e(p["org"])} &middot; {e(p["when"])}</p>
     <p class="summary">{e(p["summary"])}</p>
+    <ul class="annot">
+      <li><span class="k">ROLE</span><span class="v">{e(project_role(p))}</span></li>
+      <li><span class="k">WHEN</span><span class="v">{e(p["when"])}</span></li>
+    </ul>
     <ul class="tags">{tags}</ul>
+    {f'<div class="stats">{stats}</div>' if stats else ""}
     <figure class="cover" style="--ar:{ratio(p["slug"], name)}">
       {media_button(kind, p["slug"], name, alt, up)}
     </figure>
@@ -715,7 +991,10 @@ def build_project(index):
 </header>
 
 <section class="writeup">
-  <div class="wrap"><div class="prose">{paras}</div></div>
+  <div class="wrap">
+    {f'<div class="prose lede">{lede}</div>' if lede else ""}
+    {blocks}
+  </div>
 </section>
 {model_section}
 <section>
@@ -728,9 +1007,9 @@ def build_project(index):
 <nav class="pager">
   <div class="wrap">
     <a class="pager-link" href="{prev_p["slug"]}.html">
-      <span class="dir">Previous</span><span class="name">{e(prev_p["title"])}</span></a>
+      <span class="dir">{prev_num:02d} &middot; Previous</span><span class="name">{e(prev_p["title"])}</span></a>
     <a class="pager-link next" href="{next_p["slug"]}.html">
-      <span class="dir">Next</span><span class="name">{e(next_p["title"])}</span></a>
+      <span class="dir">{next_num:02d} &middot; Next</span><span class="name">{e(next_p["title"])}</span></a>
   </div>
 </nav>
 
@@ -743,9 +1022,17 @@ def main():
     # Fail loudly if the content references media that build_media.py did not produce.
     missing = []
     for p in PROJECTS:
-        for _, name, _ in [p["cover"]] + [(k, n, c) for k, n, c in p["gallery"]]:
+        refs = [p["cover"]] + p["gallery"]
+        for s in p["sections"]:
+            m = s["media"]
+            if m is None:
+                continue
+            refs += m if isinstance(m, list) else [m]
+        for _, name, _ in refs:
             if f'{p["slug"]}/{name}' not in DIMS:
                 missing.append(f'{p["slug"]}/{name}')
+    if f'{HERO_IMAGE[0]}/{HERO_IMAGE[1]}' not in DIMS:
+        missing.append(f'{HERO_IMAGE[0]}/{HERO_IMAGE[1]} (hero image)')
     if missing:
         print("Referenced media not built:", *missing, sep="\n  ")
         return 1

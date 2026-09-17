@@ -70,6 +70,20 @@ MANIFEST = {
             "IMG_3336.HEIC": "cycloidal-drive",
             "6BFC0264-A6DF-4B09-AC07-1E774D9EF7D7.JPG": "wrist-assembly",
             "IMG_3245.HEIC": "wrist-build",
+            # Figures from the team's IRC System Design and Development Review
+            # (Chapter 3, Robotic Arm), pulled out with a one-off PyMuPDF script
+            # since these are report figures rather than personal photos/renders.
+            "report_linear_base_cad.png": "base-rail-cad",
+            "report_linear_base_slots.png": "base-slots-detail",
+            "report_shoulder_gearbox.png": "shoulder-gearbox-cad",
+            "report_elbow_gearbox.png": "elbow-gearbox-cad",
+            "report_shoulder_link_hemmed.png": "link-hemmed-edge",
+            "report_wrist_differential.png": "wrist-differential-cad",
+            "report_wrist_shaft_support.png": "wrist-shaft-support-cad",
+            "report_gripper_cad.png": "gripper-cad",
+            "report_gearbox_disc_fea.png": "gearbox-disc-fea",
+            "report_gearbox_plate_fea.png": "gearbox-plate-fea",
+            "gearbox_cross_section.png": "gearbox-cross-section",
         },
         "videos": {
             "Screen Recording 2025-10-07 133909.mp4": ("wrist-cad", 0, None),

@@ -31,9 +31,37 @@
   800,
   669
  ],
+ "mars-rover-arm/base-rail-cad": [
+  800,
+  500
+ ],
+ "mars-rover-arm/base-slots-detail": [
+  800,
+  233
+ ],
  "mars-rover-arm/cycloidal-drive": [
   800,
   600
+ ],
+ "mars-rover-arm/elbow-gearbox-cad": [
+  800,
+  511
+ ],
+ "mars-rover-arm/gearbox-cross-section": [
+  800,
+  705
+ ],
+ "mars-rover-arm/gearbox-disc-fea": [
+  764,
+  553
+ ],
+ "mars-rover-arm/gearbox-plate-fea": [
+  665,
+  547
+ ],
+ "mars-rover-arm/gripper-cad": [
+  800,
+  728
  ],
  "mars-rover-arm/linear-base-cad": [
   936,
@@ -43,6 +71,10 @@
   406,
   720
  ],
+ "mars-rover-arm/link-hemmed-edge": [
+  800,
+  576
+ ],
  "mars-rover-arm/rover-cad": [
   800,
   432
@@ -50,6 +82,10 @@
  "mars-rover-arm/rover-field": [
   800,
   600
+ ],
+ "mars-rover-arm/shoulder-gearbox-cad": [
+  800,
+  532
  ],
  "mars-rover-arm/wrist-assembly": [
   450,
@@ -62,6 +98,14 @@
  "mars-rover-arm/wrist-cad": [
   836,
   720
+ ],
+ "mars-rover-arm/wrist-differential-cad": [
+  800,
+  689
+ ],
+ "mars-rover-arm/wrist-shaft-support-cad": [
+  800,
+  657
  ],
  "me/portrait": [
   800,

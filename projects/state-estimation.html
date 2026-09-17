@@ -8,7 +8,10 @@
 <meta property="og:title" content="State Estimation on Lie Groups | Vidit Bohra">
 <meta property="og:description" content="Attitude estimation on Lie groups, extended into visual inertial odometry on a rig I built.">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="../style.css?v=26b130a5">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css?v=adb5a4c7">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9881;</text></svg>">
 </head>
 <body>
@@ -26,10 +29,15 @@
 
 <header class="project-head">
   <div class="wrap">
+    <p class="project-num mono">04 / 06</p>
     <h1>State Estimation on Lie Groups</h1>
-    <p class="role">SC651, Prof. Ravi Banavar, IIT Bombay &middot; Aug 2025 to present</p>
     <p class="summary">Attitude estimation on Lie groups, extended into visual inertial odometry on a rig I built.</p>
+    <ul class="annot">
+      <li><span class="k">ROLE</span><span class="v">SC651, Prof. Ravi Banavar, IIT Bombay</span></li>
+      <li><span class="k">WHEN</span><span class="v">Aug 2025 to present</span></li>
+    </ul>
     <ul class="tags"><li>Lie groups</li><li>Kalman</li><li>Mahony</li><li>Allan deviation</li><li>RP2040</li><li>Python</li></ul>
+    <div class="stats"><div class="stat"><div class="n mono">40%</div><div class="l">Lower deviation vs. TRIAD/QUEST</div></div></div>
     <figure class="cover" style="--ar:1.1396">
       <button class="media" data-full="../assets/state-estimation/camera-imu-rig.jpg?v=134936ee" aria-label="Enlarge image: A hand holding the custom camera and IMU rig built on a printed plate"><img src="../assets/state-estimation/camera-imu-rig-thumb.jpg?v=fdb32ff5" alt="A hand holding the custom camera and IMU rig built on a printed plate" loading="lazy" decoding="async"></button>
     </figure>
@@ -37,22 +45,25 @@
 </header>
 
 <section class="writeup">
-  <div class="wrap"><div class="prose"><p>This started as coursework in estimation on Lie groups: implementing the Kalman filter, TRIAD and QUEST on an IMU to get a stable attitude estimate by fusing gyroscope, accelerometer and magnetometer data. I then implemented the Mahony filter and compared it systematically against TRIAD and QUEST, which gave a 40% lower standard deviation in the output.</p><p>It has since grown into a visual inertial setup on hardware I built, an RP2040 Pico with an IMX335 camera and an MPU6050, characterised with an Allan deviation analysis to pin down the gyro and accelerometer noise parameters. The filter estimates the camera trajectory and a landmark map together from the fused visual and inertial stream.</p></div></div>
+  <div class="wrap">
+    
+    <div class="case-block text-only"><div class="cb-text"><h3>Attitude estimation</h3><p>This started as coursework in estimation on Lie groups: implementing the Kalman filter, TRIAD and QUEST on an IMU to get a stable attitude estimate by fusing gyroscope, accelerometer and magnetometer data. I then implemented the Mahony filter and compared it systematically against TRIAD and QUEST, which gave a 40% lower standard deviation in the output.</p></div></div><div class="case-block"><figure class="cb-media" style="--ar:1.3333"><button class="media" data-full="../assets/state-estimation/rig-detail.jpg?v=add7db44" aria-label="Enlarge image: The rig set up for a capture run."><img src="../assets/state-estimation/rig-detail-thumb.jpg?v=ed09646e" alt="The rig set up for a capture run." loading="lazy" decoding="async"></button><figcaption>The rig set up for a capture run.</figcaption></figure><div class="cb-text"><h3>Visual inertial hardware</h3><p>It has since grown into a visual inertial setup on hardware I built, an RP2040 Pico with an IMX335 camera and an MPU6050, characterised with an Allan deviation analysis to pin down the gyro and accelerometer noise parameters. The filter estimates the camera trajectory and a landmark map together from the fused visual and inertial stream.</p></div></div>
+  </div>
 </section>
 
 <section>
   <div class="wrap">
     <h2>Gallery</h2>
-    <div class="grid"><figure class="tile" style="--ar:1.3333"><button class="media" data-full="../assets/state-estimation/rig-detail.jpg?v=add7db44" aria-label="Enlarge image: The rig set up for a capture run."><img src="../assets/state-estimation/rig-detail-thumb.jpg?v=ed09646e" alt="The rig set up for a capture run." loading="lazy" decoding="async"></button><figcaption>The rig set up for a capture run.</figcaption></figure><figure class="tile" style="--ar:1.7167"><button class="media video" data-video="../assets/state-estimation/vio-run.mp4?v=65aa5022" aria-label="Play video: A live run with tracked features and the state estimate overlaid."><img src="../assets/state-estimation/vio-run-poster.jpg?v=5125243d" alt="A live run with tracked features and the state estimate overlaid." loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span></button><figcaption>A live run with tracked features and the state estimate overlaid.</figcaption></figure><figure class="tile plot" style="--ar:2.168"><button class="media" data-full="../assets/state-estimation/trajectory.jpg?v=3ca58fad" aria-label="Enlarge image: Estimated path coloured by time, with the recovered landmarks."><img src="../assets/state-estimation/trajectory-thumb.jpg?v=144621f2" alt="Estimated path coloured by time, with the recovered landmarks." loading="lazy" decoding="async"></button><figcaption>Estimated path coloured by time, with the recovered landmarks.</figcaption></figure><figure class="tile plot" style="--ar:1.1158"><button class="media" data-full="../assets/state-estimation/landmark-map.jpg?v=c072c5f5" aria-label="Enlarge image: The resulting 3D landmark map."><img src="../assets/state-estimation/landmark-map-thumb.jpg?v=7316f33c" alt="The resulting 3D landmark map." loading="lazy" decoding="async"></button><figcaption>The resulting 3D landmark map.</figcaption></figure><figure class="tile plot" style="--ar:1.8735"><button class="media" data-full="../assets/state-estimation/allan-deviation.jpg?v=a6fab0a2" aria-label="Enlarge image: Allan deviation for all six IMU axes. This sets the noise model the filter uses."><img src="../assets/state-estimation/allan-deviation-thumb.jpg?v=efbf2699" alt="Allan deviation for all six IMU axes. This sets the noise model the filter uses." loading="lazy" decoding="async"></button><figcaption>Allan deviation for all six IMU axes. This sets the noise model the filter uses.</figcaption></figure></div>
+    <div class="grid"><figure class="tile" style="--ar:1.7167"><button class="media video" data-video="../assets/state-estimation/vio-run.mp4?v=65aa5022" aria-label="Play video: A live run with tracked features and the state estimate overlaid."><img src="../assets/state-estimation/vio-run-poster.jpg?v=5125243d" alt="A live run with tracked features and the state estimate overlaid." loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span></button><figcaption>A live run with tracked features and the state estimate overlaid.</figcaption></figure><figure class="tile plot" style="--ar:2.168"><button class="media" data-full="../assets/state-estimation/trajectory.jpg?v=3ca58fad" aria-label="Enlarge image: Estimated path coloured by time, with the recovered landmarks."><img src="../assets/state-estimation/trajectory-thumb.jpg?v=144621f2" alt="Estimated path coloured by time, with the recovered landmarks." loading="lazy" decoding="async"></button><figcaption>Estimated path coloured by time, with the recovered landmarks.</figcaption></figure><figure class="tile plot" style="--ar:1.1158"><button class="media" data-full="../assets/state-estimation/landmark-map.jpg?v=c072c5f5" aria-label="Enlarge image: The resulting 3D landmark map."><img src="../assets/state-estimation/landmark-map-thumb.jpg?v=7316f33c" alt="The resulting 3D landmark map." loading="lazy" decoding="async"></button><figcaption>The resulting 3D landmark map.</figcaption></figure><figure class="tile plot" style="--ar:1.8735"><button class="media" data-full="../assets/state-estimation/allan-deviation.jpg?v=a6fab0a2" aria-label="Enlarge image: Allan deviation for all six IMU axes. This sets the noise model the filter uses."><img src="../assets/state-estimation/allan-deviation-thumb.jpg?v=efbf2699" alt="Allan deviation for all six IMU axes. This sets the noise model the filter uses." loading="lazy" decoding="async"></button><figcaption>Allan deviation for all six IMU axes. This sets the noise model the filter uses.</figcaption></figure></div>
   </div>
 </section>
 
 <nav class="pager">
   <div class="wrap">
     <a class="pager-link" href="bipedal-robot.html">
-      <span class="dir">Previous</span><span class="name">Robo Sapien, a Bipedal Robot</span></a>
+      <span class="dir">03 &middot; Previous</span><span class="name">Robo Sapien, a Bipedal Robot</span></a>
     <a class="pager-link next" href="support-free-printing.html">
-      <span class="dir">Next</span><span class="name">Support Free 3D Printing</span></a>
+      <span class="dir">05 &middot; Next</span><span class="name">Support Free 3D Printing</span></a>
   </div>
 </nav>
 
