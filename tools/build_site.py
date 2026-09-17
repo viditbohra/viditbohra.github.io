@@ -209,28 +209,74 @@ PROJECTS = [
         "body": [
             "The manipulator on a semi autonomous rover built by a 30 person team to cross rough "
             "terrain and perform dexterous tasks at international competitions. I designed the "
-            "5-DOF arm and reworked most of its drivetrain, including a custom two stage 81:1 "
-            "cycloidal drive for torque density and a 2-DOF differential wrist redesigned as a "
-            "3D print that came out 35% lighter and much easier to manufacture.",
-            "Each joint uses explicit steering, so a commanded angle maps to one actuator rather "
-            "than being shared across a coupled linkage, which keeps the control predictable. I "
-            "implemented a worm drive in the explicit steering for better control and "
-            "robustness. A worm cannot be back driven, so a joint holds its position under load "
-            "and stays where it is if power is lost, instead of collapsing under the weight of "
-            "the arm.",
-            "The linear base needed its own fix. Scaled up, it kept binding on tolerance stack "
-            "up, so the rails were redesigned around the principle used in optical disk drives "
-            "to take the over constraint out.",
+            "5-DOF arm and reworked most of its drivetrain: a custom two stage 81:1 cycloidal "
+            "drive, a 2-DOF differential wrist redesigned as a 3D print that came out 35% "
+            "lighter, and the linear base, links and gripper below. Each joint also uses "
+            "explicit steering, so a commanded angle maps to one actuator rather than being "
+            "shared across a coupled linkage, which keeps the control predictable.",
+            {"h": "Linear base"},
+            "The carriage rides on two rails, and no assembly is ever perfectly parallel: "
+            "manufacturing and build tolerance can leave the rails converging in a slight V, or "
+            "sitting high on one side and low on the other. Fixing the carriage rigidly to both "
+            "would fight that misalignment and bind. Instead the mounting holes on one side are "
+            "cut as slots, so the carriage can shift sideways to whatever the rails actually are "
+            "rather than what they were drawn as, and the binding goes away.",
+            "The carriage is driven by a single long lead screw, and a screw that long does not "
+            "stay perfectly true to the rails over its length. The plate that bolts the nut to "
+            "the carriage carries a vertical slot for the same reason: it lets the nut float up "
+            "and down instead of being pinned rigidly to the carriage, so the nut only ever "
+            "pushes the carriage horizontally, the direction it is actually meant to drive in, "
+            "and never picks up a vertical load it was never meant to carry.",
+            {"h": "Wrist"},
+            "The wrist gets its 2 DOF from a differential: two motors mounted back at the base "
+            "drive into a bevel gear differential, so driving both in the same direction "
+            "produces one motion and driving them opposite produces the other, with anything in "
+            "between blending the two. That keeps both actuators off the moving end of the arm, "
+            "where their mass would cost the most.",
+            "One of those two drives runs through a worm stage, added for two reasons: a worm "
+            "gets a large reduction in a single small stage, and a worm cannot be back driven, "
+            "so that axis holds its position under load and stays where it is if power is lost, "
+            "instead of collapsing under the weight of the arm.",
+            "The output shaft originally hung as an unsupported cantilever off the gearbox. That "
+            "was wrong twice over: the whole bending load went through the gear mesh with "
+            "nothing else carrying it, and the print's layers took that load perpendicular to "
+            "themselves, the weakest direction an FDM part has. Supporting the shaft back to the "
+            "base fixed both problems at once, giving the load a path into the base instead of "
+            "overhanging the gearbox, and loading the print along its layers instead of trying "
+            "to peel them apart.",
+            {"h": "Gearbox"},
+            "The two stage 81:1 cycloidal drive at the shoulder needed its own balancing fix. A "
+            "single cycloidal disc spins with its mass offset from the output axis, and normal "
+            "practice pairs it with a second disc at the opposite eccentricity so the two cancel "
+            "each other's out of balance force. Done the straightforward way, two stages means "
+            "four discs. Working from a published two stage cycloidal design, I built this "
+            "gearbox out of two discs total, getting both reduction stages without doubling the "
+            "disc count or the length of the housing.",
+            "It has not been a clean win. Trading four discs for two gives up some of that "
+            "balance, and the drive stutters under load, a limitation that comes from the "
+            "geometry itself rather than from how it was built. I reached out to the paper's "
+            "authors to ask about it and never heard back, so this is an open problem I am still "
+            "working through, not a solved one.",
+            {"h": "Links"},
+            "The arm's links are cut from sheet metal, with the edges hemmed, folded back on "
+            "themselves, rather than left flat. Hemming raises the section's area moment of "
+            "inertia without adding thickness or bolting on a separate stiffening flange, so a "
+            "link cut from thin sheet gets meaningfully stiffer in bending for the same weight.",
+            {"h": "Gripper"},
+            "The gripper sits on the linear base at the working end of the arm, with its jaw "
+            "travel lined up to the competition's sample handling tasks rather than a generic "
+            "centred pinch grip.",
+            {"h": "Results"},
             "With this rover the team placed 2nd at the European Rover Challenge against 24 "
             "teams from 15 countries, took 1st in the Astrobiology Mission at the International "
             "Rover Challenge, and finished 9th overall in the IRC against more than 35 "
             "institutions worldwide.",
         ],
         "gallery": [
-            ("image", "arm-cad", "The full 5-DOF arm in CAD, with the linear base and gripper."),
-            ("image", "cycloidal-drive", "The two stage 81:1 cycloidal drive."),
-            ("image", "wrist-assembly", "The 2-DOF differential wrist, assembled."),
-            ("image", "wrist-build", "The wrist with its lead screw and gripper drive."),
+            ("image", "arm-cad", "The full 5-DOF arm in CAD, with the linear base, worm driven wrist and gripper."),
+            ("image", "cycloidal-drive", "The two stage cycloidal drive, both stages built from two discs instead of four."),
+            ("image", "wrist-assembly", "The bevel gear differential at the centre of the 2-DOF wrist, assembled."),
+            ("image", "wrist-build", "The wrist with its worm stage, lead screw and gripper drive."),
             ("image", "rover-cad", "Full rover chassis in CAD."),
             ("video", "wrist-cad", "The 2-DOF differential wrist in CAD."),
             ("video", "linear-base-cad", "Linear base motion study."),
@@ -248,11 +294,33 @@ PROJECTS = [
         "body": [
             "A 6-DOF biped built from scratch after a literature review of existing walking "
             "robots set the baseline requirements. The frame uses lightweight carbon fibre tubes "
-            "to keep mass down, limit sensors for joint homing, and a rack and pinion assembly "
-            "that shifts the centre of mass predictably instead of relying on the legs alone to "
-            "stay upright.",
-            "Control was approached three ways. A PPO policy trained in Isaac Lab, with a multi "
-            "term reward covering velocity tracking, feet air time and joint limit penalties, "
+            "for the leg links, joined at each servo with 3D printed brackets, and limit sensors "
+            "at every joint for homing.",
+            {"h": "Weight shift mechanism"},
+            "Standing on two feet means shifting the centre of mass over whichever leg is about "
+            "to bear it, and a rack and pinion assembly at the hip does that shifting "
+            "predictably instead of leaving it to the legs alone. The battery mounts directly on "
+            "the moving carriage of that mechanism rather than on the fixed torso, so its mass "
+            "becomes the shifting counterweight instead of dead weight the frame just has to "
+            "carry. That gives the mechanism more authority for the same travel and takes the "
+            "heaviest single component off the torso's own weight budget.",
+            {"h": "Wiring"},
+            "The carriage travels back and forth on every step, and running wiring straight "
+            "across that motion would fatigue and tangle it over time. A drag chain carries the "
+            "cabling across the travel instead, so the wiring bends the same way on every cycle "
+            "rather than wherever it happens to fall.",
+            {"h": "Test rig"},
+            "Before committing to the full assembly, both legs were built and driven on a "
+            "standalone 4-DOF test rig off the torso, to validate the leg design and tune "
+            "control on hardware without risking the complete robot.",
+            {"h": "Underactuated ankle joints"},
+            "Not every DOF is actuated. Two joints in the ankle are left passive and returned by "
+            "springs instead of motors, which keeps the weight and part count down while still "
+            "giving the robot the compliance it needs to turn, since a fully rigid foot cannot "
+            "pivot against the ground.",
+            {"h": "Control"},
+            "Three approaches were tried. A PPO policy trained in Isaac Lab, with a multi term "
+            "reward covering velocity tracking, feet air time and joint limit penalties, "
             "produced a stable walking gait in simulation. A state space model fitted from "
             "Simscape at 85% fit drove a data driven controller in Simulink. And an LQR "
             "controller on a linear inverted pendulum model produced a stable gait analytically. "
@@ -260,8 +328,8 @@ PROJECTS = [
             "handle real time balance.",
         ],
         "gallery": [
-            ("image", "cad-render", "The biped in CAD, trussed throughout to cut mass."),
-            ("image", "leg-test-rig", "The legs on a standalone test rig, with the hip rack and pinion and carbon fibre tubes visible."),
+            ("image", "cad-render", "The biped in CAD, trussed throughout to cut mass, with the rack and pinion weight shift mechanism at the hip."),
+            ("image", "leg-test-rig", "The legs on the standalone 4-DOF test rig, hip rack and pinion and carbon fibre tubes visible."),
             ("video", "rl-policy", "The trained PPO policy walking in Isaac Lab."),
             ("video", "data-driven-control", "The data driven controller running in simulation."),
             ("video", "hardware-test", "Hardware test."),
@@ -408,7 +476,7 @@ def ratio(slug, name):
     return round(w / h, 4)
 
 
-def shell(title, description, body, depth=0):
+def shell(title, description, body, depth=0, extra_head=""):
     up = "../" * depth
     if depth:
         nav = f'<a class="back" href="{up}index.html">All work</a>'
@@ -428,7 +496,7 @@ def shell(title, description, body, depth=0):
 <meta property="og:type" content="website">
 <link rel="stylesheet" href="{asset(up, "style.css")}">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9881;</text></svg>">
-</head>
+{extra_head}</head>
 <body>
 
 <header class="topbar">
@@ -606,8 +674,27 @@ def build_project(index):
     kind, name, alt = p["cover"]
 
     tags = "".join(f"<li>{e(t)}</li>" for t in p["tags"])
-    paras = "".join(f"<p>{e(t)}</p>" for t in p["body"])
+    paras = "".join(
+        f'<h3>{e(t["h"])}</h3>' if isinstance(t, dict) else f"<p>{e(t)}</p>"
+        for t in p["body"]
+    )
     tiles = "".join(tile(k, p["slug"], n, c, up) for k, n, c in p["gallery"])
+
+    model_section = ""
+    extra_head = ""
+    if p.get("model"):
+        model_src = asset(up, f'assets/{p["slug"]}/{p["model"]}')
+        model_section = f"""
+<section>
+  <div class="wrap">
+    <h2>Interactive CAD</h2>
+    <model-viewer src="{model_src}" alt="{e(p['title'])} CAD model"
+      camera-controls auto-rotate shadow-intensity="1"></model-viewer>
+  </div>
+</section>
+"""
+        extra_head = ('<script type="module" src="https://cdn.jsdelivr.net/npm/'
+                      '@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>\n')
 
     prev_p = PROJECTS[index - 1]
     next_p = PROJECTS[(index + 1) % len(PROJECTS)]
@@ -630,7 +717,7 @@ def build_project(index):
 <section class="writeup">
   <div class="wrap"><div class="prose">{paras}</div></div>
 </section>
-
+{model_section}
 <section>
   <div class="wrap">
     <h2>Gallery</h2>
@@ -649,7 +736,7 @@ def build_project(index):
 
 </main>
 """
-    return shell(f'{p["title"]} | Vidit Bohra', p["summary"], body, depth=1)
+    return shell(f'{p["title"]} | Vidit Bohra', p["summary"], body, depth=1, extra_head=extra_head)
 
 
 def main():

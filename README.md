@@ -69,3 +69,18 @@ filename in `projects/`, and its key in each script all match:
 
 Adding a new photo or clip means adding it to the manifest in `build_media.py` and to
 the matching project's `gallery` list in `build_site.py`, then running both scripts.
+
+## Adding an interactive CAD model
+
+Project pages can show a rotatable, zoomable 3D model instead of just renders, via the
+`<model-viewer>` web component (loaded from a CDN, no build step). To add one:
+
+1. Export the assembly as glTF/GLB. SolidWorks has no native glTF export, so the usual
+   path is exporting a STEP file, importing that into Blender, and exporting GLB from
+   there. Simplify the mesh and, if Blender's exporter supports it, enable Draco
+   compression, so the file stays small enough for a web page.
+2. Drop the `.glb` into `assets/<slug>/`, alongside that project's other media.
+3. Add a `"model": "filename.glb"` key to that project's dict in `PROJECTS`
+   (`tools/build_site.py`).
+4. Run `python tools/build_site.py`. The project page picks up an "Interactive CAD"
+   section automatically; leaving the `"model"` key out skips that section entirely.
