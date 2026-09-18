@@ -661,7 +661,7 @@ CASE_STUDY_CHAPTERS = [
         ],
     },
     {
-        "num": "02", "mech": "Shoulder", "title": "Shoulder", "model": "shoulder",
+        "num": "02", "mech": "Shoulder", "title": "Shoulder", "model": "shoulder", "sectionable": True,
         "blocks": [
             ("beat", "Design decision", [
                 "A two-stage cycloidal drive, 81:1, rated to 160 Nm and held by a "
@@ -718,7 +718,7 @@ CASE_STUDY_CHAPTERS = [
         ],
     },
     {
-        "num": "03", "mech": "Elbow", "title": "Elbow", "model": "elbow",
+        "num": "03", "mech": "Elbow", "title": "Elbow", "model": "elbow", "sectionable": True,
         "blocks": [
             ("beat-media", "Design decision", [
                 "A lighter single stage cycloidal drive, 34:1 and 65 Nm, "
@@ -1170,6 +1170,8 @@ def build_case_study_chapter(slug, up, chapter):
         model_bytes = MODELS.get(f'{slug}/{chapter["model"]}', 0)
         model_attrs = (f' data-part-model="{model_src}" data-part-bytes="{model_bytes}"'
                         f' data-part-label="{e(part_label)}"')
+        if chapter.get("sectionable"):
+            model_attrs += ' data-part-sectionable="1"'
 
     return (f'<section class="chapter" data-mech="{e(chapter["mech"])}"{model_attrs}>'
             + "".join(parts) + "</section>")
@@ -1270,6 +1272,7 @@ def build_case_study(p):
   <div class="inspect-progress" id="inspect-progress"></div>
   <div class="inspect-controls">
     <button class="inspect-reset" id="inspect-reset" type="button">Reset view</button>
+    <button class="inspect-section" id="inspect-section" type="button" hidden>Section view</button>
     <span class="inspect-hint">Drag to orbit &middot; scroll to zoom &middot; arrow keys also work</span>
   </div>
 </dialog>

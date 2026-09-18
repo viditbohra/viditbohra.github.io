@@ -15,7 +15,7 @@ const KEYWORDS = {
   "Linear base": ["linear_base", "mgn9", "rail2", "lift_the_rail", "side_plate", "side_top_plate_hub",
                    "top_cylinder", "to_connect_5mm_spacers", "for_the_other_bearing_raiser",
                    "bearing_heigh_inc", "please_let_this_be_the_final_mount", "new_block",
-                   "fake_ball_screw", "motor_plate", "weird_holder", "shaft_original"],
+                   "fake_ball_screw", "motor_plate"],
   "Shoulder": ["shoulder", "gear_assembly", "gears", "stage_1", "stage_2", "gear_holder"],
   "Elbow": ["elbow", "8coupler", "coupler_assem", "collar", "hyper_hub_d", "6d"],
   "Wrist": ["worm", "cant_make_it_any_smaller", "differential"],
@@ -57,6 +57,7 @@ document.querySelectorAll(".chapter[data-mech]").forEach((el) => {
     url: el.dataset.partModel,
     bytes: Number(el.dataset.partBytes) || 0,
     label: el.dataset.partLabel || el.dataset.mech,
+    sectionable: el.dataset.partSectionable === "1",
   };
 });
 
@@ -84,7 +85,7 @@ function updateInspectButton(mechName) {
 function openActivePart() {
   if (!activePart) return;
   const spec = HUD[MECHANISMS.find((m) => PARTS[m] === activePart)];
-  inspector.open(activePart.url, `The ${activePart.label}`, spec?.rows);
+  inspector.open(activePart.url, `The ${activePart.label}`, spec?.rows, activePart.sectionable);
 }
 
 inspectBtn?.addEventListener("click", openActivePart);
@@ -169,11 +170,19 @@ new GLTFLoader().load(stageWrap.dataset.model, (gltf) => {
 
   model.traverse((obj) => {
     if (!obj.isMesh) return;
-    let node = obj, bucket = null;
-    while (node) {
+    // Walk root -> mesh (not mesh -> root): a sub-assembly's own name (e.g.
+    // "Shoulder Assembly Final 1.0") is an unambiguous signal for everything
+    // inside it, whereas a leaf part can carry a generic name ("shaft
+    // original-1") that happens to collide with an unrelated mechanism's
+    // keyword. Checking outermost-first means that collision never gets a
+    // chance to win once the correct sub-assembly has already matched.
+    const chain = [];
+    for (let node = obj; node; node = node.parent) chain.push(node);
+    chain.reverse();
+    let bucket = null;
+    for (const node of chain) {
       bucket = classifyByName(node.name);
       if (bucket) break;
-      node = node.parent;
     }
     const box = new THREE.Box3().setFromObject(obj);
     const centroid = box.getCenter(new THREE.Vector3());

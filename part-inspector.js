@@ -13,6 +13,17 @@ import { frameBox } from "./frame-box.js";
 const REDUCE = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const ORBIT_STEP = 0.08; // radians per arrow-key press
 const ZOOM_STEP = 0.12; // fraction of distance per +/- press
+const SECTION_VIEW_DIR = new THREE.Vector3(-0.5, -0.38, -0.9).normalize(); // camera -> target, shared with framing
+
+// Snap the shared view direction to its dominant world axis, so the cut
+// reads as a clean straight section rather than a diagonal slice.
+function axisSnappedNormal(dir) {
+  const ax = Math.abs(dir.x), ay = Math.abs(dir.y), az = Math.abs(dir.z);
+  if (az >= ax && az >= ay) return new THREE.Vector3(0, 0, Math.sign(dir.z) || 1);
+  if (ax >= ay) return new THREE.Vector3(Math.sign(dir.x) || 1, 0, 0);
+  return new THREE.Vector3(0, Math.sign(dir.y) || 1, 0);
+}
+const SECTION_PLANE_NORMAL = axisSnappedNormal(SECTION_VIEW_DIR);
 
 const dialog = document.getElementById("inspect-dialog");
 const canvas = document.getElementById("inspect-canvas");
@@ -20,6 +31,7 @@ const titleEl = document.getElementById("inspect-title");
 const specsEl = document.getElementById("inspect-specs");
 const closeBtn = document.getElementById("inspect-close");
 const resetBtn = document.getElementById("inspect-reset");
+const sectionBtn = document.getElementById("inspect-section");
 const progressEl = document.getElementById("inspect-progress");
 
 if (!dialog) {
@@ -38,13 +50,20 @@ let openInitial = null; // { position, target } for Reset
 let userInteracted = false;
 let rafId = null;
 
+let sectionOn = false;
+let sectionBox = null; // THREE.Box3 of currentModel, set in open()
+let sectionCenter = null; // screen-space-centered framing target, used as the cut plane's anchor
+let sectionGroup = null; // THREE.Group: stencil-marking meshes + cap, added to scene when on
+let sectionMarkMaterials = []; // cloned materials on the marking meshes, for disposal
+
 const cache = new Map(); // url -> THREE.Group (loaded gltf.scene)
 const loading = new Map(); // url -> Promise, so prefetch + open never double-fetch
 
 function ensureScene() {
   if (renderer) return;
-  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, stencil: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.localClippingEnabled = true;
 
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(32, 1, 0.01, 100);
@@ -123,7 +142,7 @@ export function prefetch(url) {
   loadModel(url).catch(() => {});
 }
 
-export async function open(url, label, specs) {
+export async function open(url, label, specs, sectionable) {
   if (!dialog || !url) return;
   ensureScene();
 
@@ -137,10 +156,13 @@ export async function open(url, label, specs) {
     .map(([k, v]) => `<div class="inspect-spec-row"><span>${k}</span><b>${v}</b></div>`)
     .join("");
 
+  if (sectionBtn) sectionBtn.hidden = !sectionable;
+
   if (!dialog.open) dialog.showModal();
   document.body.classList.add("inspect-open");
   resize();
 
+  teardownSection();
   if (currentModel) {
     scene.remove(currentModel);
     currentModel = null;
@@ -154,8 +176,9 @@ export async function open(url, label, specs) {
     scene.add(model);
 
     const box = new THREE.Box3().setFromObject(model);
-    const viewDir = new THREE.Vector3(-0.5, -0.38, -0.9);
-    const framing = frameBox(box, viewDir, camera.fov, camera.aspect || 1, 1.5);
+    sectionBox = box;
+    const framing = frameBox(box, SECTION_VIEW_DIR, camera.fov, camera.aspect || 1, 1.5);
+    sectionCenter = framing.target.clone();
     openInitial = framing;
     camera.position.copy(framing.position);
     controls.target.copy(framing.target);
@@ -172,6 +195,7 @@ export async function open(url, label, specs) {
 
 export function close() {
   if (!dialog) return;
+  teardownSection();
   loadToken += 1; // invalidate any in-flight load
   if (dialog.open) dialog.close();
   document.body.classList.remove("inspect-open");
@@ -186,6 +210,103 @@ function resetView() {
   controls.target.copy(openInitial.target);
   controls.autoRotate = !REDUCE;
   controls.update();
+}
+
+function buildSectionGroup() {
+  if (!currentModel || !sectionBox || !sectionCenter) return;
+  currentModel.updateMatrixWorld(true);
+
+  const center = sectionCenter;
+  const plane = new THREE.Plane().setFromNormalAndCoplanarPoint(SECTION_PLANE_NORMAL, center);
+
+  const group = new THREE.Group();
+  sectionMarkMaterials = [];
+
+  currentModel.traverse((obj) => {
+    if (!obj.isMesh) return;
+
+    // Physically remove the near-side geometry from the real mesh.
+    const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+    for (const m of mats) m.clippingPlanes = [plane];
+
+    // Two stencil-marking clones per real mesh (standard clipping+stencil capping):
+    // back faces increment, front faces decrement, leaving a non-zero count
+    // wherever solid material crosses the plane.
+    const baseMat = new THREE.MeshBasicMaterial({
+      depthWrite: false, depthTest: false, colorWrite: false,
+      stencilWrite: true, stencilFunc: THREE.AlwaysStencilFunc,
+      clippingPlanes: [plane],
+    });
+
+    const backMat = baseMat.clone();
+    backMat.side = THREE.BackSide;
+    backMat.stencilFail = backMat.stencilZFail = backMat.stencilZPass = THREE.IncrementWrapStencilOp;
+    const backMesh = new THREE.Mesh(obj.geometry, backMat);
+    backMesh.matrix.copy(obj.matrixWorld);
+    backMesh.matrixAutoUpdate = false;
+    backMesh.renderOrder = 1;
+
+    const frontMat = baseMat.clone();
+    frontMat.side = THREE.FrontSide;
+    frontMat.stencilFail = frontMat.stencilZFail = frontMat.stencilZPass = THREE.DecrementWrapStencilOp;
+    const frontMesh = new THREE.Mesh(obj.geometry, frontMat);
+    frontMesh.matrix.copy(obj.matrixWorld);
+    frontMesh.matrixAutoUpdate = false;
+    frontMesh.renderOrder = 1;
+
+    group.add(backMesh, frontMesh);
+    sectionMarkMaterials.push(backMat, frontMat);
+  });
+
+  // One capping disc, sized to comfortably cover the model, painted only
+  // where the stencil count left by the marking meshes above is non-zero.
+  const sphere = sectionBox.getBoundingSphere(new THREE.Sphere());
+  const capGeom = new THREE.PlaneGeometry(sphere.radius * 2.5, sphere.radius * 2.5);
+  const capMat = new THREE.MeshStandardMaterial({
+    color: 0xb8bec8, side: THREE.DoubleSide, metalness: 0.15, roughness: 0.7,
+    stencilWrite: true, stencilRef: 0, stencilFunc: THREE.NotEqualStencilFunc,
+  });
+  const capMesh = new THREE.Mesh(capGeom, capMat);
+  capMesh.position.copy(center);
+  capMesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), SECTION_PLANE_NORMAL);
+  capMesh.renderOrder = 2;
+  capMesh.onAfterRender = (r) => r.clearStencil();
+  group.add(capMesh);
+
+  sectionGroup = group;
+  scene.add(group);
+}
+
+function teardownSection() {
+  if (currentModel) {
+    currentModel.traverse((obj) => {
+      if (!obj.isMesh) return;
+      const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+      for (const m of mats) m.clippingPlanes = [];
+    });
+  }
+  if (sectionGroup) {
+    scene.remove(sectionGroup);
+    for (const mat of sectionMarkMaterials) mat.dispose();
+    sectionMarkMaterials = [];
+    const cap = sectionGroup.children[sectionGroup.children.length - 1];
+    cap.geometry.dispose();
+    cap.material.dispose();
+    sectionGroup = null;
+  }
+  sectionOn = false;
+  sectionBtn?.classList.remove("active");
+}
+
+function setSectionOn(on) {
+  if (on === sectionOn) return;
+  if (on) {
+    buildSectionGroup();
+    sectionOn = true;
+    sectionBtn?.classList.add("active");
+  } else {
+    teardownSection();
+  }
 }
 
 function orbitBy(deltaAzimuth, deltaPolar) {
@@ -216,6 +337,7 @@ function animate() {
 if (dialog) {
   closeBtn?.addEventListener("click", close);
   resetBtn?.addEventListener("click", resetView);
+  sectionBtn?.addEventListener("click", () => setSectionOn(!sectionOn));
 
   // Click on the backdrop (the dialog element itself, not its content) closes it.
   dialog.addEventListener("click", (e) => {
@@ -225,6 +347,7 @@ if (dialog) {
   // Esc triggers the native 'cancel' -> 'close' sequence; run our own
   // cleanup on 'close' so it fires for every closing path uniformly.
   dialog.addEventListener("close", () => {
+    teardownSection();
     document.body.classList.remove("inspect-open");
     loadToken += 1;
     if (rafId) cancelAnimationFrame(rafId);
