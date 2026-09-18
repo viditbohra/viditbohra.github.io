@@ -63,6 +63,15 @@ MANIFEST = {
     },
     "mars-rover-arm": {
         "src": "mrt",
+        "models_src": "cads",
+        "models": {
+            "final_arm_glb.glb": "arm",
+            "linear_base_final.glb": "linear-base",
+            "Shoulder_Assembly_Final_1.0.glb": "shoulder",
+            "elbow_assem_copy.glb": "elbow",
+            "wrist.glb": "wrist",
+            "Eqp_gripper_Amaran_1.3_2023.glb": "gripper",
+        },
         "images": {
             "IMG_3774.HEIC": "rover-field",
             "Screenshot 2026-02-25 202137.png": "arm-cad",
@@ -88,7 +97,7 @@ MANIFEST = {
         "videos": {
             "Screen Recording 2025-10-07 133909.mp4": ("wrist-cad", 0, None),
             "Screen Recording 2025-10-07 134343.mp4": ("linear-base-cad", 0, None),
-            "IMG_2851.MOV": ("linear-base-demo", 0, None),
+            "IMG_2851.MOV": ("linear-base-demo", 0, None, -90),
         },
     },
     "bipedal-robot": {
@@ -225,18 +234,30 @@ def convert_image(src, dest_stem, brighten=None, autocrop=False, face_crop=False
         return size
 
 
-def convert_video(src, dest_stem, start, duration):
-    """Returns the (width, height) of the generated poster frame."""
+def convert_video(src, dest_stem, start, duration, rotate=0):
+    """Returns the (width, height) of the generated poster frame.
+
+    `rotate` turns a portrait phone clip landscape for layouts that need a
+    horizontal frame - 90 for clockwise, -90 for counterclockwise. It runs
+    before the scale filter so VIDEO_HEIGHT still bounds the output's short
+    edge correctly either way.
+    """
     mp4 = dest_stem.with_suffix(".mp4")
     cmd = [FFMPEG, "-y", "-loglevel", "error"]
     if start:
         cmd += ["-ss", str(start)]
     cmd += ["-i", str(src), "-t", str(duration if duration else VIDEO_MAX_SECONDS)]
+    filters = []
+    if rotate == 90:
+        filters.append("transpose=1")
+    elif rotate == -90:
+        filters.append("transpose=2")
+    filters.append(f"scale=-2:'min({VIDEO_HEIGHT},ih)':flags=lanczos")
     cmd += [
         "-an",  # every one of these is silent or has useless audio
         "-c:v", "libx264", "-profile:v", "main", "-pix_fmt", "yuv420p",
         "-crf", str(VIDEO_CRF), "-preset", "slow",
-        "-vf", f"scale=-2:'min({VIDEO_HEIGHT},ih)':flags=lanczos",
+        "-vf", ",".join(filters),
         "-movflags", "+faststart",
         str(mp4),
     ]
@@ -253,12 +274,24 @@ def convert_video(src, dest_stem, start, duration):
         return im.size
 
 
+def copy_model(src, dest):
+    """Models are already glTF binaries from CAD export - nothing to
+    transcode, just move them into assets/ and report the byte size the
+    page needs to show real download-weight numbers before a click."""
+    shutil.copyfile(src, dest)
+    return dest.stat().st_size
+
+
 def main():
     only = set(sys.argv[1:])
     dims_file = OUT / "dimensions.json"
+    models_file = OUT / "models.json"
     dims = {}
+    models = {}
     if only and dims_file.exists():
         dims = json.loads(dims_file.read_text())
+    if only and models_file.exists():
+        models = json.loads(models_file.read_text())
     elif not only and OUT.exists():
         shutil.rmtree(OUT)
 
@@ -278,6 +311,9 @@ def main():
             with zipfile.ZipFile(src_dir / cfg["zip"]) as zf:
                 zf.extractall(tmp)
             search_dirs.append(tmp)
+
+        if "models_src" in cfg:
+            search_dirs.append(SRC / cfg["models_src"])
 
         def locate(name):
             for d in search_dirs:
@@ -301,15 +337,29 @@ def main():
                 except Exception as exc:
                     failures.append(f"{slug}/{name}: {exc}")
 
-            for name, (out_name, start, dur) in cfg.get("videos", {}).items():
+            for name, spec in cfg.get("videos", {}).items():
+                out_name, start, dur, *rest = spec
+                rotate = rest[0] if rest else 0
                 path = locate(name)
                 if path is None:
                     failures.append(f"{slug}: source video missing, {name}")
                     continue
                 try:
-                    w, h = convert_video(path, dest_dir / out_name, start, dur)
+                    w, h = convert_video(path, dest_dir / out_name, start, dur, rotate)
                     dims[f"{slug}/{out_name}"] = [w, h]
                     print(f"  vid  {out_name}  {w}x{h}")
+                except Exception as exc:
+                    failures.append(f"{slug}/{name}: {exc}")
+
+            for name, out_name in cfg.get("models", {}).items():
+                path = locate(name)
+                if path is None:
+                    failures.append(f"{slug}: source model missing, {name}")
+                    continue
+                try:
+                    size = copy_model(path, dest_dir / f"{out_name}.glb")
+                    models[f"{slug}/{out_name}"] = size
+                    print(f"  glb  {out_name}  {size / 1024 / 1024:.1f} MB")
                 except Exception as exc:
                     failures.append(f"{slug}/{name}: {exc}")
         finally:
@@ -317,6 +367,7 @@ def main():
                 shutil.rmtree(tmp, ignore_errors=True)
 
     dims_file.write_text(json.dumps(dict(sorted(dims.items())), indent=1))
+    models_file.write_text(json.dumps(dict(sorted(models.items())), indent=1))
 
     files = [f for f in OUT.rglob("*.*") if f.suffix != ".json"]
     total = sum(f.stat().st_size for f in files)

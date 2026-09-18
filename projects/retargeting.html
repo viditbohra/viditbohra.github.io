@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=adb5a4c7">
+<link rel="stylesheet" href="../style.css?v=cfafce7a">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9881;</text></svg>">
 </head>
 <body>
@@ -50,7 +50,6 @@
     <div class="case-block"><figure class="cb-media" style="--ar:1.3166"><button class="media video" data-video="../assets/retargeting/pepper-arms.mp4?v=1387b61b" aria-label="Play video: Retargeted arm motion on the Pepper humanoid."><img src="../assets/retargeting/pepper-arms-poster.jpg?v=1125de32" alt="Retargeted arm motion on the Pepper humanoid." loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span></button><figcaption>Retargeted arm motion on the Pepper humanoid.</figcaption></figure><div class="cb-text"><h3>Pipeline</h3><p>An end to end pipeline that takes an ordinary monocular RGB video of someone handling an object and produces motion a robot can actually execute. Human pose comes from HMR2 (4D-Humans), joint positions are extracted through SMPL, and the motion is retargeted onto the robot using inverse kinematics in Holosoma. It runs on both a Pepper humanoid and a UR5 arm.</p></div></div><div class="case-block flip"><figure class="cb-media" style="--ar:1.995"><button class="media" data-full="../assets/retargeting/point-cloud.jpg?v=97023046" aria-label="Enlarge image: Cleaned point cloud of the manipulated object, XZ and XY projections."><img src="../assets/retargeting/point-cloud-thumb.jpg?v=ee3ddb0a" alt="Cleaned point cloud of the manipulated object, XZ and XY projections." loading="lazy" decoding="async"></button><figcaption>Cleaned point cloud of the manipulated object, XZ and XY projections.</figcaption></figure><div class="cb-text"><h3>Preserving the interaction</h3><p>The hard part is what gets preserved. Copying joint angles between bodies with different proportions breaks the task, because the hand ends up in the wrong place relative to the object. This pipeline uses an interaction mesh formulation that encodes the spatial relationship between the human and the object, so the retargeted motion keeps the manipulation intact rather than just the pose.</p></div></div>
   </div>
 </section>
-
 <section>
   <div class="wrap">
     <h2>Gallery</h2>
@@ -87,6 +86,6 @@
   <img id="lightbox-img" alt="">
 </div>
 
-<script src="../script.js?v=2e2f18cc"></script>
+<script src="../script.js?v=5198890e"></script>
 </body>
 </html>

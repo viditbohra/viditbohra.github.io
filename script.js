@@ -12,10 +12,10 @@
   try { stored = localStorage.getItem('theme'); } catch (e) { /* private mode */ }
   if (stored) root.setAttribute('data-theme', stored);
 
+  // Light is the default regardless of the visitor's OS preference - dark
+  // is opt-in only, via the toggle, not auto-detected.
   function isDark() {
-    var set = root.getAttribute('data-theme');
-    if (set) return set === 'dark';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return root.getAttribute('data-theme') === 'dark';
   }
 
   function paint() { toggle.textContent = isDark() ? '☀' : '☾'; }
@@ -30,31 +30,36 @@
   paint();
 
   /* ── Lightbox ──────────────────────────────────────────── */
+  // Only present on pages that use the standard shell() markup - the
+  // case-study page has its own image/video handling instead.
 
   var box = document.getElementById('lightbox');
-  var boxImg = document.getElementById('lightbox-img');
-  var opener = null;
 
-  function open(button) {
-    opener = button;
-    boxImg.src = button.dataset.full;
-    boxImg.alt = button.querySelector('img').alt;
-    box.hidden = false;
-    document.body.style.overflow = 'hidden';
-    document.getElementById('lightbox-close').focus();
+  if (box) {
+    var boxImg = document.getElementById('lightbox-img');
+    var opener = null;
+
+    var open = function (button) {
+      opener = button;
+      boxImg.src = button.dataset.full;
+      boxImg.alt = button.querySelector('img').alt;
+      box.hidden = false;
+      document.body.style.overflow = 'hidden';
+      document.getElementById('lightbox-close').focus();
+    };
+
+    var close = function () {
+      box.hidden = true;
+      boxImg.src = '';
+      document.body.style.overflow = '';
+      if (opener) opener.focus();
+    };
+
+    box.addEventListener('click', close);
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape' && !box.hidden) close();
+    });
   }
-
-  function close() {
-    box.hidden = true;
-    boxImg.src = '';
-    document.body.style.overflow = '';
-    if (opener) opener.focus();
-  }
-
-  box.addEventListener('click', close);
-  document.addEventListener('keydown', function (ev) {
-    if (ev.key === 'Escape' && !box.hidden) close();
-  });
 
   /* ── Media ─────────────────────────────────────────────── */
 

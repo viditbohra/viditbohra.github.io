@@ -25,16 +25,8 @@
   --prose: 620px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #151310; --raised: #1e1a15; --ink: #ece7db; --muted: #a39c8c;
-    --faint: #7d7666; --line: #2c281f; --accent: #e07b45; --accent-c: #151310;
-    --shadow: 0 1px 2px rgb(0 0 0 / 45%), 0 10px 22px rgb(0 0 0 / 36%);
-  }
-}
-
-/* The toggle writes data-theme on <html> and has to beat the media query,
-   so both directions are stated explicitly. */
+/* Light is the default regardless of the visitor's OS preference - dark
+   is opt-in only, via the toggle below, not auto-detected. */
 :root[data-theme="light"] {
   --paper: #f1ede3; --raised: #e8e2d3; --ink: #17140f; --muted: #6d675b;
   --faint: #948d7d; --line: #d9d3c3; --accent: #c1440e; --accent-c: #ffffff;
@@ -374,14 +366,6 @@ section > .wrap > h2 {
   .cb-media { position: static; }
 }
 
-/* ── CAD viewer ──────────────────────────────────────────── */
-
-model-viewer {
-  display: block; width: 100%; aspect-ratio: 4 / 3; max-height: 520px;
-  border: 1px solid var(--line); background: var(--raised);
-  --poster-color: transparent;
-}
-
 /* ── Galleries (supporting media not used inline) ────────────── */
 
 .grid { display: flex; flex-wrap: wrap; gap: 16px; }
@@ -478,6 +462,10 @@ footer h2 {
   .when { order: -1; padding-top: 0; margin-bottom: 4px; }
   .tile { flex-basis: calc(var(--ar) * 120px); }
   .media, .tile.plot .media, .cover .media, .cb-media .media { max-height: 360px; }
+  /* A long ROLE value (a project with no short title falls back to its
+     full org name) can outrun the screen at this width if held to one
+     line - let it wrap instead of pushing the page into horizontal scroll. */
+  .annot li { white-space: normal; }
 }
 
 @media (max-width: 560px) {
